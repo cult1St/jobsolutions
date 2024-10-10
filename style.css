@@ -1,0 +1,100 @@
+
+
+.hero div a{
+text-decoration: none;
+margin: 20px;
+color: darkblue;
+}
+.hero div{
+display: flex;
+flex-direction: column;
+}
+
+
+.navigation .ff div{
+border-radius: 20px;
+position: absolute;
+z-index: 100;
+background-color: aliceblue;
+display: none;
+}
+
+    
+.navigation .ff div a{
+text-decoration: none;
+color: blue;
+display: block;
+text-align: center;
+padding: 20px;
+padding-left: 10px;
+padding-right: 100px;
+}
+.navigation .ff a{
+
+text-decoration: none;
+color: gray;
+}
+.navigation .ff a:hover{
+color: blue;
+}
+.banner{
+
+    background-color: rgb(23, 120, 205);
+    padding: 20px;
+  
+}
+.banner .div{
+    align-items: center;
+}
+
+.banner div form{
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-color:rgba(0, 0, 200,0.6);
+}
+
+.buttonspan{
+    display: none;
+}
+
+
+
+
+@media all and (max-width:1000px){
+.subbody{
+display: block;
+margin: 10px;
+
+}
+.footer a{
+
+margin: 5px;
+}
+
+
+.buttonspan button span{
+    width: 20px;
+   
+}
+.navigation .ff a{
+    margin-left: 10px;
+}
+.linking2{
+    margin-left: 10px;
+}
+}
+@media all and (max-width:780px){
+    .ff{
+        display: none;
+    }
+   
+        
+        .navigation .ff a{
+            margin-left: 10px;
+        }
+        .navigation .ff #linking2 span{
+            display: none;
+        }
+       
+       
+}

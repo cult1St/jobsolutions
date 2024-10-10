@@ -1,0 +1,1 @@
+[28-Sep-2024 11:59:40 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home/momoduw2/public_html/jobsolutions/classes/User.php on line 325

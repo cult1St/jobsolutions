@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="../fontawesome/css/all.css">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" onsubmit="return validateThisFrom(this)">
+    <select name="select" id="select" class="form-select" >
+        <option selected>choose year</option>
+    </select>
+    <select name="month" id="month" class="form-select">
+        <option selected> choose Month</option>
+        <option value="jan">January</option>
+        <option value="feb">february</option>
+        <option value="mar">march</option>
+        <option value="apr">april</option>
+        <option value="may">may</option>
+        <option value="jun">June</option>
+        <option value="jul">July</option>
+        <option value="aug">August</option>
+        <option value="sep">September</option>
+        <option value="oct">October</option>
+        <option value="nov">November</option>
+        <option value="dec">December</option>
+
+    </select>
+    <select name="select1" id="select2" class="form-select">
+        <option selected value="">choose day</option>
+    </select>
+    <select name="functions" id="function">
+        <option selected value="">Enter Function</option>
+    </select>
+<div class="row">
+    <div class="col-3">
+        <input type="password" name="pass" id="pass" class="form-control">
+        <button type="button" style="border: none;width: 10px;"><span class="fa-regular fa-eye"></span></button>
+    </div>
+</div>
+<div class="input-group mb-3">
+    <input type="password" class="form-control" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
+    <button class="btn btn-outline-secondary" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
+  <button type="submit">submit</button>
+</div>
+  </form>
+
+    
+
+
+    <script src="../jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+           
+                for (var k = 1990; k <= 2024; k++) {
+                    $("#select").append("<option value'"+k+"'>"+k+"</option>")
+                    
+                }
+                $("#month").click(function(){
+                    var manth= $("#month").children().val();
+               if(manth=="apr"||manth=="jun"||manth=="sep"||manth=="nov"){
+                for (var d = 1; d <= 30; d++) {
+                    $("#select2").append("<option>"+d+"</option>")
+                    
+                }
+               }else if(manth=="feb"){
+                for (var d = 1; d <= 28; d++) {
+                    $("#select2").append("<option>"+d+"</option>")
+                    
+                }
+               }else{
+                for (var d = 1; d <= 31; d++) {
+                    $("#select2").append("<option>"+d+"</option>")
+                    
+                }
+               }
+                })
+               var functions = ["Accounting, Auditing & Finance",
+                                "Admin & Office",
+                                "Creative & Design",
+                                "Building & Architecture",
+                                "Consulting & Strategy",
+                                "Customer Service & Support",
+                                "Engineering & Technology",
+                                "Farming & Agriculture",
+                                "Food Services & Catering",
+                                "Hospitality & Leisure",
+                                "Software & Data",
+                                "Legal Services",
+                                "Marketing & Communications",
+                                "Medical & Pharmaceutical",
+                                "Product & Project Management",
+                                "Estate Agents & Property Management",
+                                "Quality Control & Assurance",
+                                "Human Resources",
+                                "Management & Business Development",
+                                "Community & Social Services",
+                                "Sales",
+                                "Supply Chain & Procurement",
+                                "Research, Teaching & Training",
+                                "Trades & Services",
+                                "Driver & Transport Services",
+                                "Health & Safety"]
+            for (var f = 0;f<26;f++) {
+                $("#function").append("<option value='"+f+"'>"+functions[f]+"</option>")
+                
+            }
+
+                
+                
+            })
+      
+            function validateThisFrom(thisForm) {
+        if (thisForm.functions.value == "") {
+            alert("Please make a selection");
+            thisForm.functions.focus();
+            return false;
+        }
+        if (thisForm.select.value == "") {
+            alert("Please make a selection");
+            thisForm.select.focus();
+            return false;
+        }
+    }
+    </script>
+</body>
+</html>

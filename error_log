@@ -1,0 +1,8 @@
+[17-Sep-2024 12:54:56 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/momoduw2/public_html/jobsolutions/partials/banner.php on line 21
+[17-Sep-2024 12:54:56 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/momoduw2/public_html/jobsolutions/partials/banner.php on line 35
+[17-Sep-2024 12:54:56 UTC] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'momoduw2_mydb.job_category' doesn't exist in /home/momoduw2/public_html/jobsolutions/classes/Employer.php:163
+Stack trace:
+#0 /home/momoduw2/public_html/jobsolutions/classes/Employer.php(163): PDOStatement->execute()
+#1 /home/momoduw2/public_html/jobsolutions/index.php(78): Employer->fetch_categories()
+#2 {main}
+  thrown in /home/momoduw2/public_html/jobsolutions/classes/Employer.php on line 163
