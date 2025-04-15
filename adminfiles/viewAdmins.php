@@ -36,7 +36,7 @@ require_once "admin_guard.php";
                                                 User Name
                                             </th>
                                             <th>
-                                                Date Last registered 
+                                                Date Last Logged In
                                             </th>
                                             <th>
                                                 Actions
@@ -50,8 +50,29 @@ require_once "admin_guard.php";
                                             ?>
                                             <tr>
                                                 <td><?php echo $n++ ?></td>
-                                                <td><?php echo $admin['admin_username'] ?></td>
-                                                <td><?php echo $admin['dateLastLoggedIn'] ?></td>
+                                                <td><?php
+                                                    if($admin["admin_id"] == $_SESSION["adminonline"]) {
+                                                        echo "<div class='badge bg-success'>Online</div>";
+                                                    }
+                                                echo $admin['admin_username'] ?></td>
+                                                <td><?php echo $admin['dateLastLoggedIn'] ?>
+                                                    <p>
+                                                        <?php
+                                                            $lastdate= strtotime($admin['dateLastLoggedIn']);
+                                                            $newdate = time() - $lastdate;
+                                                            $din = $newdate/(60*60*24);
+                                                            if($din < 1) {
+                                                            
+                                                            }else{
+                                                                $d = explode('.', $din);
+                                                                $d = $d[0];                                                       
+                                                                echo $d." days ago";
+                                                            }
+                                                           
+                                                        ?>
+                                                    </p>
+                                                
+                                                </td>
                                                 <td>
                                                     <form action="update_admin.php" method="post">
                                                         <input type="hidden" name="id" value="<?php echo $admin['admin_id'] ?>">

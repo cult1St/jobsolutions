@@ -6,7 +6,7 @@
      if(isset($_SESSION['user_id'])){
          $id = $_SESSION['user_id'];
          $user_id = $user->get_user_by_id($id);
-         echo "<h2 style='color:blue'>Welcome ".$user_id['jobSeeker_firstName']."</h2>";
+        
      }else{
          header("location:../login.php");
          
@@ -16,48 +16,27 @@
      $fetchs = $employer->fetch_vacancies_for_users();
      
 
-     $num = 100;
+     $num = 0;
      $numb = 0;
-     if(!empty($user_id['jobSeeker_firstName'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_lastName'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_phone'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_email'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_gender'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_qualification'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_experience'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_CV'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     if(!empty($user_id['jobSeeker_Address'])){
-        $num =$num-10 ;
-        $numb = $numb + 10;
-     }
-     
-     $num = $num/100;
+    //  if(!empty($user_id['jobSeeker_firstName'])){
+    //     $num =$num-10 ;
+    //     $numb = $numb + 10;
+    //  }
+   foreach ($user_id as $value) {
+   //foreach($value as $v){
+    if(!empty($value)){
+            $num =$num+7.69 ;
+            $numb = $numb + 10;
+          }
+  // }
+}
+    //  $num = $num/100;
 
-     $calc = 472 * $num;
+    //  $calc = 472 * $num;
+    $num = 472-472*($num/100);
+
+  //  $calc = 472 * $num;
+  
    
    
 
@@ -75,6 +54,7 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../fontawesome/css/all.css">
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <style>
         .myoff ul li a{
@@ -103,12 +83,12 @@
         stroke: url(#GradientColor);
         stroke-width: 20px;
         stroke-dasharray: 472;
-        stroke-dashoffset: 0;
-        animation: anim 1s linear forwards;
+        stroke-dashoffset: 472;
+        animation: anim 2s linear forwards;
       }
       @keyframes anim{
         100%{
-          stroke-dashoffset: <?php echo $calc ?>;
+          stroke-dashoffset: <?php echo $num ?>;
         }
       }
         
@@ -120,28 +100,14 @@
 <body>
     <div class="container">
        
-        
+        <h2 class="text-primary">Welcome <?php echo $user_id['jobSeeker_firstName'] ?></h2>
         <div class="row navigation">
             <div class="col col-md-1">
                 <img src="../images/logo.png" alt="my logo" class="img-fluid">
             </div>
            
-            <div class="col col-md-3 ff">
-                
-                <a id="linking1" href="#" class="">Job Seekers<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="jobseekdropdown">
-                    <a href="login.html" style="border-bottom: 1px solid black;">Create an account</a>
-                    <a href="login.html" style="border-top: 1px solid black;border-bottom: 1px solid black">upload CV</a>
-                    <a href="#jobcat" style="border-top: 1px solid black">Job Vacancies</a>
-                </div>
-            </div>
-            <div class="col col-md-3 ff">
-                <a id="linking2" href="#" class="" >Employers<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="employerdropdown">
-                    <a href="employer.html" style="border-bottom: 1px solid black;">Create an employer account</a>
-                    <a href="#" style="border-top: 1px solid black;border-bottom: 1px solid black">Post Your Job Vacancies</a>
-               </div>
-            </div>
+            
+               
             <div class="col col-md-2 ff">
                 <a id="linking2" href="#" class="" >Help<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
                 <div class="employerdropdown">
@@ -164,7 +130,7 @@
             unset($_SESSION['feedback']);
         }
         if(isset($_SESSION['errormsg'])){
-            echo '<div class="alert alert-danger">'.$_SESSION['feedback'].'</div>';
+            echo '<div class="alert alert-danger">'.$_SESSION['errormsg'].'</div>';
             unset($_SESSION['errormsg']);
         }
 
@@ -176,32 +142,33 @@
                 <h1 style="text-align: center;">Available jobs</h1>
                 <?php
                     foreach($fetchs as $fetch){
+                        $exp_date = $fetch['dateClosed'];
+                        $today_date = date('Y-m-d');
+                        $exp_date = strtotime($exp_date);
+                        $today_date = strtotime($today_date);
+                        if($today_date<$exp_date){
+                          
                 ?>
                 <div class="col-12 m-2" style="border: 1px solid black;">
-                    <form action="../process/processapply.php" method="post" enctype="multipart/form-data">
+                <img src="../logos/<?php echo $fetch['employer_companyLogo'] ?>" alt="" style="width: 100px;height: 100px;">
                     <h3 style="text-align: center;"><?php echo $fetch['employer_companyName'] ?></h3>
-                    <input type="hidden" name="employerid" value="<?php echo $fetch['jobVacancy_employerId'] ?>">
-                    <input type="hidden" name="jobSeekerid" value="<?php echo $id ?>">
+                    
                     <label for="">Role</label>
-                    <input type="text" disabled class="form-control" value="<?php echo $fetch['jobVacancy_title'] ?>">
+                    <input type="text" disabled class="form-control" value="<?php echo ucfirst($fetch['jobVacancy_title']) ?>">
                     <label for="">Qualification</label>
-                    <input type="text" disabled class="form-control" value=" <?php echo $fetch['qualification'] ?>">
+                    <input type="text" disabled class="form-control" value=" <?php echo ucfirst($fetch['qualification']) ?>">
                     <p>Salary Range= <?php echo $fetch['vacancy_salaryRange'] ?></p>
-                    <p><?php echo $fetch['work_type'] ?></p>
-                    <p class="card card-body">Job Description: <?php echo $fetch['vacancy_description'] ?></p>
-                    <input type="hidden" name="jobVid" value="<?php echo $fetch['jobVacancy_id'] ?>">
-                    <input type="hidden" name="jobSid" value="<?php echo $id ?>">
-                    <div class="row">
-                        <div class="col">
-                            <input type="file" name="cv" id="cv" class="form-control my-3">
-                            <span class="text-secondary">Choose A file for your CV which must not Be above 10mb. pdf only</span>
-                        </div>
-                       </div>
-                    <button name="button" type="submit" value="btn" class="btn btn-primary mx-5">Apply</button>
-                    </form>
+                    
+                    <label for="">Location</label>
+                    <p>State:   <?php echo $fetch['state_name'] ?> Local Government Area: <?php echo $fetch['lga_name'] ?></p>
+           
+                      
+                    <a href="viewjobs.php?jid=<?php echo $fetch['jobVacancy_id']?>"  type="submit" class="btn btn-primary mx-5">Apply</a>
+                  
                 </div> 
 
                 <?php
+                        }
                     }
                 ?>
                
@@ -224,7 +191,7 @@
 
     
  </div>
- <h1 class="text-info"><span id="numb"></span>% Completed</h1>
+ <h1 ><span class="text-primary" id="numb"></span>% Completed</h1>
                <div>
                 <p>
                 <input <?php
@@ -282,7 +249,7 @@
 
 
 
-        <div class="row" id="contact" >
+        <div class="row" id="contac" >
             <h3>Other ways to contact us</h3>
             <div class="col-md-6"  style="display: inline;">
              <a href="#"><img src="../icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
@@ -315,7 +282,7 @@
         </div>
         <ul>
             <li><a href="../employeepage.php">Home</a></li>
-            <li><a href="usersettings.php">update information</a></li>
+            <li><a href="view_applications.php">View Applications</a></li>
             <li><a href="usersettings.php">settings</a></li>
             <li><a href="">Help</a></li>
         </ul>
@@ -333,40 +300,7 @@
             $(".ff").hover(function(){
                 $(this).children("div").slideToggle(100).siblings("a").children("span").toggleClass("fa-xmark")
             })
-            var functions = ["Accounting, Auditing & Finance",
-                                "Admin & Office",
-                                "Creative & Design",
-                                "Building & Architecture",
-                                "Consulting & Strategy",
-                                "Customer Service & Support",
-                                "Engineering & Technology",
-                                "Farming & Agriculture",
-                                "Food Services & Catering",
-                                "Hospitality & Leisure",
-                                "Software & Data",
-                                "Legal Services",
-                                "Marketing & Communications",
-                                "Medical & Pharmaceutical",
-                                "Product & Project Management",
-                                "Estate Agents & Property Management",
-                                "Quality Control & Assurance",
-                                "Human Resources",
-                                "Management & Business Development",
-                                "Community & Social Services",
-                                "Sales",
-                                "Supply Chain & Procurement",
-                                "Research, Teaching & Training",
-                                "Trades & Services",
-                                "Driver & Transport Services",
-                                "Health & Safety"]
-            for (var f = 0;f<26;f++) {
-                $("#jobcat").append("<option value='"+f+"'>"+functions[f]+"</option>")
-                
-            }
-            for (var f = 0;f<26;f++) {
-                $("#jobind").append("<option value='"+f+"'>"+functions[f]+"</option>")
-                
-            }
+            
         })
     </script>
     <script src="../bootstrap/js/bootstrap.js"></script>
@@ -380,11 +314,12 @@
         let numb = document.getElementById("numb");
         let count = 0;
         setInterval(()=>{
-           if(count ==<?php echo $numb ?>){
+           if(count ==<?php echo $numb-30 ?>){
             clearInterval();
            }else{
             count += 1;
             numb.innerHTML = count ;
+           
            }
         }, 30)
     </script>

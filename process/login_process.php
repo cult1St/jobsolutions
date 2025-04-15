@@ -18,14 +18,19 @@
            
             
             $_SESSION['user_id']= $users;
-            header("location:../employeepage.php");
+            if(isset($_SESSION['previous_url'])){
+                header("location: ".$_SESSION['previous_url'] );
+            }else{
+                header("location:../employeepage.php");
+            }
+            
         }else{
-            $_SESSION['errormsg'] = "<div class='alert alert-danger'>invalid credentials</div>";
+            $_SESSION['errormsg'] = "invalid credentials";
             header("location:../login.php");
         }
  
     }else{
-         $_SESSION['errormsg'] = "<div class='alert alert-danger'>Try Logging in first</div>";
+         $_SESSION['errormsg'] = "Try Logging in first";
         header("location:../login.php");
     }
 

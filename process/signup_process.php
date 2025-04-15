@@ -8,26 +8,37 @@
         $lastname = sanitizer($_POST['lastname']);
         $email = sanitizer($_POST['email']);
         $number = sanitizer($_POST['number']);
-        $DOB = sanitizer($_POST['year'])."-".sanitizer($_POST['month'])."-".sanitizer($_POST['day']);
-        $DOB = date($DOB);
-        $state = sanitizer($_POST['states']);
-        $gender = sanitizer($_POST['gender']);
+        // $DOB = sanitizer($_POST['year'])."-".sanitizer($_POST['month'])."-".sanitizer($_POST['day']);
+        // $DOB = date($DOB);
+        // $state = sanitizer($_POST['states']);
+        // $gender = sanitizer($_POST['gender']);
         $password = sanitizer($_POST['cpassword']);
+
+        if(empty($firstname) || empty($lastname) || empty($email) || empty($number)  || empty($password)){
+            $_SESSION['errormsg'] = 'All Fields required';
+            header("location:../login.php?step=signup");
+            exit();
+            die();
+
+        }
         $password = password_hash($password, PASSWORD_BCRYPT);
+
 
         require_once "../classes/User.php";
 
         $user = new User;
-        $users = $user->insert_user($firstname, $lastname, $email, $password, $DOB, $number, $state, $gender);
+        $users = $user->insert_user($firstname, $lastname, $email, $password, $number);
         if($users){
             $user_id = $user->get_user_id($email);
             
             $_SESSION['user_id']= $user_id;
             header("location:../employeepage.php");
+        }else{
+            header("location:../login.php?step=signup");
         }
  
     }else{
-        header("location:../login.php");
+        header("location:../login.php?step=signup");
     }
 
 ?>

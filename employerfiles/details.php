@@ -13,6 +13,11 @@
     $cv = $employer->fetch_applications_by_userid($id);
   
     $fetch = $user3->get_user_by_id($id);
+    // $scan = scandir('../applicationfiles');
+    // foreach($scan as $s){
+    //     echo $s = $cv['application_CV'] ? $s : "";
+    //   }
+    //var_dump($scan);
  
    // $fetchapplications = $employer->fetch_applications($_SESSION['useronline']);
     
@@ -22,7 +27,10 @@
 ?>
 
         <div class="row"> 
-            <div class="col mt-5 card">
+            <div class="col-2"> <a href="applications.php" class="btn btn-warning">Go Back</a></div>
+            <div class="col-8 mt-5 card">
+                <div id="view"></div>
+           
                 <div class="card-header">
                     <i class="fa fa-user"></i>
                     <h3 class="text-primary">
@@ -48,8 +56,44 @@
                     <h3 class="text-success">
                         Experience: <?php echo $fetch['jobSeeker_experience'] ?>
                     </h3>
+
+
+                    <div class="my-2">
+                    <?php $stats = $cv['application_status'] ;
+                                        if($stats == 0){
+                                            echo '<div  class="badge bg-warning">Pending</div>';
+                                        }elseif($stats == 1){
+                                            echo '<div class="badge bg-danger">Not accepted</div>';
+                                        }elseif($stats == 2){
+                                            echo '<div class="badge bg-success">Approved</div>';
+                                        }
+                                    
+                                    ?>
+                    </div>
+                    <?php 
+                     $stats = $cv['application_status'] ;
+                    if($stats==0){
+                        ?>
+                    <form id="stats" action="">
+                        <input type="hidden" name="id" value="<?php echo $fetch['jobSeeker_id']?>">
+                           <div class="row">
+                            <div class="col">
+                                <label for="">Accept Application</label>
+                            <input type="radio" name="stats" value="2" class="form-check-input" id="">
+                            </div>
+                           </div>
+                           <div class="row">
+                            <div class="col">
+                                <label for="">Reject Application</label>
+                            <input type="radio" name="stats" value="1" class="form-check-input" id="">
+                            </div>
+                           </div>
+                    </form>
+                    <?php 
+                    }
+                    ?>
                     
-                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" name="application" value="application" class="btn btn-warning noround">View CV</button>
+                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" name="application" value="application" class="cava btn btn-warning noround">View CV</button>
                       
                 </div>
             </div>
@@ -58,15 +102,16 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content ">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Applicant Resume</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <img src='../applicationfiles/<?php echo $cv['application_CV'] ?>' alt="">
+        
+        <embed class="container" height="300" src='../applicationfiles/<?php echo $cv['application_CV'] ?>' alt="">
       </div>
       
       <div class="modal-footer">
-      <button type="button" class="btn btn-warning"><span class="fa fa-arrow-down"></span>Download</button>
+      <a href="../applicationfiles/<?php echo $cv['application_CV'] ?>" download="<?php echo $cv['application_CV'] ?>" class="btn btn-warning"><span class="fa fa-arrow-down"></span>Download</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
        
       </div>

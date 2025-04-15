@@ -10,6 +10,7 @@
             $id =  General::sanitize($_POST['id']);
             $username = General::sanitize($_POST['username']);
             $password = General::sanitize($_POST['password']);
+            $password = password_hash($password, PASSWORD_DEFAULT);
             if(empty($username) || empty($password)){
                 $_SESSION['errormsg'] = 'Complete All Fields';
                 header('location:../update_admin.php');

@@ -1,4 +1,5 @@
 <?php
+session_start();    
     require_once "partials/header.php";
 
 ?>
@@ -12,15 +13,15 @@
            <div class="col-12  signup">
                 <div class="row">
                     <div class="col-8 offset-2">
+                        <?php
+    if (isset($_SESSION["errormsg"])) {
+        echo "<div class='alert alert-danger'>". $_SESSION["errormsg"] ."</div>";
+        unset($_SESSION["errormsg"]);
+    }
+                        ?>
                        
-                        <form action="employerpage.html" method="post">
+                        <form action="process/processupdate.php" method="post" enctype="multipart/form-data">
                            <div class="firstform">
-                           
-                           
-                            
-                            <label for="email">Change Email</label>
-                            <input type="email" name="email" id="email" placeholder="enter Your Email" class="form-control m-2" >
-                            <p style="color: red;display: none;" id="para4">Enter Your Email</p>
                             <label for="pass1">Change Password</label>
                             <div class="input-group mb-3">
                                 <input type="password" class="form-control" placeholder="Enter Your Password" id="pass1" aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -31,7 +32,7 @@
                               <p style="color: red;display: none;" id="para5" >Enter password</p>
                               <label for="pass2">Confirm Password</label>
                               <div class="input-group mb-3">
-                                <input type="password" class="form-control" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input type="password" name="password" class="form-control" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
                                 <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
                                 <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
 
@@ -42,22 +43,14 @@
                               <input type="text" name="ogname" id="ogname" placeholder="Enter Your Organisation Name" class="form-control m-2">
                               <p style="color: red;display: none;" id="parafour">please input your firstname</p>
                               
-                            
-                              
-                              
-                           
-                              
-                            
-                              
-                               <div class="row">
-                                <div class="col-md-6">
-                                    <label for="function1">Change  Categories specialized in</label>
-                                    <select name="function1" id="functionss" class="form-select">
-                                        <option value="" selected>Select Category</option>
-                                    </select>
-                                </div>
-                               
-                               
+                            <div class="row mb-3">
+                                <label for="logo">Put Your Logo</label>
+                                <input type="file" name="logo" id="" class="form-control">
+                            </div>
+                            <input type="hidden" name="id" value="<?php echo $_SESSION['useronline']?>">
+                            <div class="mb-3">
+                                <input type="submit" value="Update" name="update" class="btn btn-primary">
+                            </div>                         
                              
                         </form>
                     </div>

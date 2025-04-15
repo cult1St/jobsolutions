@@ -17,16 +17,13 @@ if($_POST['login']){
     }
     $employ = new Employer;
     $signup = $employ->login($email, $password);
-    if($signup==false){
-        header('location:../../employer.php');
-        exit();
-    }
+   
    
     if($signup){
         $_SESSION['useronline'] = $signup;
         header('location:../employerdashboard.php');
     }else{
-        $_SESSION['errormsg'] = 'Unable To signup Please try Again';
+       // $_SESSION['errormsg'] = 'Invalid Credentials';
         header('location:../../employer.php');
     }
 }else{

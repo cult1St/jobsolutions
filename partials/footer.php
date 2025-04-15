@@ -1,4 +1,4 @@
-<div class="row" id="contact" >
+<!-- <div class="row"  id="contact" >
            <h3>Other ways to contact us</h3>
            <div class="col-md-6"  style="display: inline;">
             <a href="#"><img src="icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
@@ -13,7 +13,35 @@
            </div>
         </div>
     </div>
-    
+     -->
+
+     
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="inner-content">
+              <p>Copyright © <?= date("Y") ?> momoduwealth.com.ng</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    </div>
+  </div>
+</div> 
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- Additional Scripts -->
+    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/owl.js"></script>
+  </body>
+</html>
 
 
 

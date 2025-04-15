@@ -1,238 +1,346 @@
 <?php
-session_start();
- 
+    session_start();
+    require_once "classes/Employer.php";
+    require_once "partials/global_functions.php";
+    $cat1 = new Employer;
+    //$cats = $cat1->fetch_cat() ;
+    $states = $cat1->fetch_state() ;
+
+    if(isset($_SESSION['useronline']) && !empty($_SESSION['useronline'])){
+        header("location: ". base_url("userfiles/dashboard.php"));
+    }
+
+    require_once "partials/header.php";
+
+
+    $step = isset($_GET['step']) && !empty($_GET['step']) ? $_GET['step'] : "login";
+
+
+    $display_none = "style='display:none'";
+    $display_block = "style='display:block'";
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My job Solutions web is a website with the sole imterest of helping Nigerians get a job of their choice without the stress of going about with their CVs ">
-    <meta name="keywords" content="jobs in lagos">
-    <meta property="og:image" content="images/logo">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="fontawesome/css/all.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
-    <style>
+
+
+             
 
 
 
-    </style>
-    
-    <title>My Job Solutions</title>
-   
-</head>
-<body>
-    <div class="container">
-        <div class="row navigation">
-            <div class="col col-md-1">
-                <img src="images/logo.png" alt="my logo" class="img-fluid"><span><h4>Job Solutions</h1></span>
-            </div>
-            <div class="col col-md-3 ff">
-                
-                <a id="linking1" href="#" class="">Job Seekers<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="jobseekdropdown">
-                    <a href="login.php" style="border-bottom: 1px solid black;">Create an account</a>
-                    <a href="login.php" style="border-top: 1px solid black;border-bottom: 1px solid black">upload CV</a>
-                    <a href="#jobcat" style="border-top: 1px solid black">Job Vacancies</a>
-                </div>
-            </div>
-            <div class="col col-md-3 ff">
-                <a id="linking2" href="#" class="" >Employers<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="employerdropdown">
-                    <a href="#" style="border-bottom: 1px solid black;">Create an employer account</a>
-                    <a href="#" style="border-top: 1px solid black;border-bottom: 1px solid black">Post Your Job Vacancies</a>
-               </div>
-            </div>
-            <div class="col col-md-2 ff">
-                <a id="linking2" href="#" class="" >Help<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="employerdropdown">
-                    <a href="#" style="border-bottom: 1px solid black;">Faq </a>
-                    <a href="#contact" style="border-top: 1px solid black;border-bottom: 1px solid black">Contact Us</a>
-               </div>
-            </div>
-            <div class="col col-md-3 lagin"><a href="index.html" style="color: rgb(32, 30, 30); text-decoration: none;">Home page</a><a href="index.html">Home</a></div>
-            <div class="col-2 buttonspan"><button class="mt-2"><span class="fa fa-bars "></span></button></div>
-        </div>
-        <div style="border: 0.1px solid black; background-color: rgb(250, 251, 251); border-radius: 30px;">
-            <h1 class="text-secondary" style="text-align: center;">Employer Section</h1>
+<div style="margin-top: 200px;" class="banner find row justify-content-center my-5">
+    <?php if($step == "login"): ?>
+        <div class="col-sm-5 text-start card" <?= $step == "login" ? $display_block : $display_none ?>>
+            <h4 class="text-primary m-2">Welcome Back, Please Login To access our portal</h4>
             <?php if(isset($_SESSION['errormsg'])){
-    echo '<div class="col-6 offset-3 alert alert-danger">'.$_SESSION['errormsg'].'</div>';
-    session_unset();
-} ?>
-            <div class="col-12  login" >
+                echo '<div class=" m-3 col-6 offset-3 alert alert-danger">'.$_SESSION['errormsg'].'</div>';
+                unset($_SESSION['errormsg']);
+            } ?>
+          
+            <form action="employerfiles/process/loginprocess.php" method="post" >
+                       <div class="mb-3 form-group">
+                      
+                        <label for="username">Email</label>
+                        <input type="email" name="email" id="username" class="form-control m-2" placeholder="Email" required>
+                       
+                        <p style="color: red;display: none;" id="para1" >Enter Email</p>
+                     
+                       </div>
 
-            <div class="row">
-                
-                <div class="col-8 offset-2">
-                   <span>New Member</span> <button id="btnnnn" class="btn btn-success" style="border: none; color: blue;background: transparent;">Sign Up</button>
-                    <form action="employerfiles/process/loginprocess.php" method="post" >
-                        <label for="username">Username</label>
-                        <input type="email" name="email" id="username" class="form-control m-2" placeholder="Email" >
-                        <p style="color: red;display: none;" id="para1" >Enter Username</p>
-
+                        <div class="form-group mb-3">
+                            <label for="">Password</label>
                         <div class="input-group mb-3">
-                            <input name="password" type="password" id="password" class="form-control" placeholder="Enter Your Password"  aria-label="Recipient's username" aria-describedby="button-addon2">
-                            <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                            <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
+                            <input required name="password" type="password" id="password" class="form-control" placeholder="Enter Your Password"  aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon5"><span class="fa-regular fa-eye"></span></button>
+                            <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon6" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
 
                           </div>
                           <p style="color: red;display: none;" id="paratwo" >Enter password</p>
+                          <a href="employerfiles/forgetpasswordform.php">Forgot Password</a>
+                        </div>
+                        <div class="mb-3">
+                        <button name="login" value="login" type="submit" class="btn btn-primary m-2" id="looginbtn">Login</button>
 
-                          <button type="button" name="login" value="login" class="btn btn-primary m-2" id="looginbtn">Login</button>
+
+                        </div>      
+                        <p>New To Our Platform <a href="?step=signup">Create Account</a> </p>
                     </form>
-                </div>
-            </div>
-           </div>
+        </div>
+            
+        <?php endif; ?>
 
-           <div class="col-12  signup">
-                <div class="row">
-                    <div class="col-8 offset-2">
-                       <span>Already Have An Account ?</span> <button id="btnnnn1"  class="" style="border: none; color: blue; background: transparent;">Login</button>
-                        <form action="employerfiles/process/signupprocess.php" method="post">
+        <?php if($step == "signup"): ?>
+        <div class="col-sm-7 text-start card p-5" <?= $step == "signup" ? $display_block : $display_none ?>>
+            <h4 class="text-primary m-2">Welcome , Your Adventure starts here</h4>
+            <?php if(isset($_SESSION['errormsg'])){
+                echo '<div class=" m-3 col-6 offset-3 alert alert-danger">'.$_SESSION['errormsg'].'</div>';
+                unset($_SESSION['errormsg']);
+            } ?>
+
+
+            <form action="employerfiles/process/signupprocess.php" method="post">
                            <div class="firstform">
+                         
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fname">Firstname</label>
+                                    <input type="text" name="firstname" id="firstname" placeholder="Enter Your FirstName" class="form-control m-2">
+                                    <p style="color: red;display: none;" id="paraone">please input your firstname</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lname">Lastname</label>
+                                    <input type="text" name="lastname" id="lastname" placeholder="Enter Your LastName" class="form-control m-2">
+                                    <p style="color: red;display: none;" id="para2">please input your lastname</p>
+                                </div>
+                            </div>
                            
-                            <label for="fname">Firstname</label>
-                            <input type="text" name="firstname" id="firstname" placeholder="Enter Your FirstName" class="form-control m-2">
-                            <p style="color: red;display: none;" id="paraone">please input your firstname</p>
-                            <label for="lname">Lastname</label>
-                            <input type="text" name="lastname" id="lastname" placeholder="Enter Your LastName" class="form-control m-2">
-                            <p style="color: red;display: none;" id="para2">please input your lastname</p>
-                            
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" placeholder="enter Your Email" class="form-control m-2" >
-                            <p style="color: red;display: none;" id="para4">Enter Your Email</p>
-                            <label for="pass1">Choose Password</label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" placeholder="Enter Your Password" id="pass1" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
-
-                              </div>
-                              <p style="color: red;display: none;" id="para5" >Enter password</p>
-                              <label for="pass2">Confirm Password</label>
-                              <div class="input-group mb-3">
-                                <input name="password" type="password" class="form-control" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
-
-                              </div>      
-                              <p style="color: red;display: none;" id="para6">password should be the same with confirm password</p>                     
-                            
-                              <label for="ogname">Name Of Organisation</label>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                <label for="ogname">Name Of Organisation</label>
                               <input type="text" name="ogname" id="ogname" placeholder="Enter Your Organisation Name" class="form-control m-2">
                               <p style="color: red;display: none;" id="parafour">please input your firstname</p>
                               
-                            
-                                <div class="col-4">
-                                    <select name="states" id="state" class="form-select firsts3 mb-3" aria-label="Large select example">
-                                        <option value="" >Choose your Company Location</option>
-                                        <option value="1">Abia</option>
-                                        <option value="2">Adamawa</option>
-                                        <option value="3">Akwa-Ibom</option>
-                                        <option value="4">Anambra</option>
-                                        <option value="5">Bauchi</option>
-                                        <option value="6">Bayelsa</option>
-                                        <option value="7">Benue</option>
-                                        <option value="8">Borno</option>
-                                        <option value="9">Cross-River</option>
-                                        <option value="10">Delta</option>
-                                        <option value="11">Ebonyi</option>
-                                        <option value="12">Edo</option>
-                                        <option value="13">Ekiti</option>
-                                        <option value="14">Enugu</option>
-                                        <option value="15">Gombe</option>
-                                        <option value="16">Imo</option>
-                                        <option value="17">Jigawa</option>
-                                        <option value="18">Kaduna</option>
-                                        <option value="19">Kano</option>
-                                        <option value="20">Katsina</option>
-                                        <option value="21">Kebbi</option>
-                                        <option value="22">Kogi</option>
-                                        <option value="23">Kwara</option>
-                                        <option value="24">Lagos</option>
-                                        <option value="25">Nasarawa</option>
-                                        <option value="26">Niger</option>
-                                        <option value="27">Ogun</option>
-                                        <option value="28">Ondo</option>
-                                        <option value="29">Osun</option>
-                                        <option value="30">Oyo</option>
-                                        <option value="31">Plateau</option>
-                                        <option value="32">Rivers</option>
-                                        <option value="33">Sokoto</option>
-                                        <option value="34">Taraba</option>
-                                        <option value="35">Yobe</option>
-                                        <option value="36a">Zamfara</option>
-                                        <option value="37">Fedral-Capital-territory</option>
-                                        <option value="38">Foreign</option>
-                                    </select>
-                                    <p style="color: red;display: none;" id="para10">select an option</p>
-                                
                                 </div>
-                              
+                                <div class="col-md-6">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" id="email" placeholder="enter Your Email" class="form-control m-2" >
+                                <p style="color: red;display: none;" id="para4">Enter Your Email</p>
+                                    </div>
+                            </div>
                            
-                               `    `   
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="pass1">Choose Password</label>
+                                    <div class="input-group mb-3">
+                                        <input type="password" name="password" class="form-control" placeholder="Enter Your Password" id="pass1" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon1"><span class="fa-regular fa-eye"></span></button>
+                                        <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
+
+                                    </div>
+                                <p style="color: red;display: none;" id="para5" >Enter password</p>
+
+                                </div>
+                                <div class="col-md-6">
+                                        <label for="pass2">Confirm Password</label>
+                                    <div class="input-group mb-3">
+                                        <input type="password" name="cpassword" class="form-control" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                        <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon3"><span class="fa-regular fa-eye"></span></button>
+                                        <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon4" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
+
+                                    </div>      
+                                    <p style="color: red;display: none;" id="para6">password should be the same with confirm password</p>        
+                                        </div>
+                            </div>
+
+                                         
                             
-                              
-                              
-                               
-                               
-                               <div class="row">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="agree" id="agree">
-                                    <label class="form-check-label" for="flexCheckIndeterminate">
-                                     I agree with the terms and condition
-                                    </label>
-                                    <button type="submit" name="signup" value="signup" class="btn btn-outline-primary" id="submiting" disabled>Register</button>
-                                  </div>
+                      
+                               <div class="row mb-3">
+                                <div class="col">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="agree" id="agree">
+                                        <label class="form-check-label" for="flexCheckIndeterminate">
+                                        I agree with the terms and condition
+                                        </label>
+                                        <button type="submit" class="btn btn-outline-primary" value="register" name="signup" id="submiting" >Register</button>
+                                    </div>
+                                </div>
+                                <p>Already Have An Account <a href="?step=login">Login</a></p>
                                </div>
                            </div>
                         </form>
-                    </div>
-                </div>
-                </div>
-                </div>
-           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="row" >
-            <h1>Other ways to contact us</h1>
-            <div class="col-md-6"  style="display: inline;">
-             <a href="#"><img src="icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
-             <a href="#"><img src="icons/instagram.png" alt="instagram link" class="img-fluid"  style="width: 30px;"></a>
-             <a href="#"><img src="icons/whatsapp.png" alt="whatsapp link" class="img-fluid"  style="width: 30px;"></a>
-            </div>
-           
-            <div class="col-12">
-             <p class=""> &copy;copyright 2024.All rights Reserved</p>
-            </div>
-            
-            </div>
-         </div>
+          
         </div>
+            
+        <?php endif; ?>
 
+
+    </div>
+
+
+
+
+    <script>
+        $(document).ready(function(){
+    $(".ff").hover(function(){
+       $(this).children("div").slideToggle(100).siblings("a").children("span").toggleClass("fa-xmark")
+    })
+    $(".login").hide()
+    $("#btnnnn1").click(function(){
+    $(".login").slideDown(2000)
+    $(".signup").slideUp(1500)
+    })
+    $("#btnnnn").click(function(){
+    $(".signup").slideDown(2000)
+    $(".login").slideUp(1500)
+    })
+    $(".secondform").hide()
+    $("input[type='text'],input[type='password'],input[type='email']").focus(function(){
+    $(this).css({"background-color":"aqua"})
+    })
+    $("input[type='text'],input[type='password'],input[type='email']").blur(function(){
+    $(this).css({"background-color":"white"})
+    })
+    var functions = ["Accounting, Auditing & Finance",
+                       "Admin & Office",
+                       "Creative & Design",
+                       "Building & Architecture",
+                       "Consulting & Strategy",
+                       "Customer Service & Support",
+                       "Engineering & Technology",
+                       "Farming & Agriculture",
+                       "Food Services & Catering",
+                       "Hospitality & Leisure",
+                       "Software & Data",
+                       "Legal Services",
+                       "Marketing & Communications",
+                       "Medical & Pharmaceutical",
+                       "Product & Project Management",
+                       "Estate Agents & Property Management",
+                       "Quality Control & Assurance",
+                       "Human Resources",
+                       "Management & Business Development",
+                       "Community & Social Services",
+                       "Sales",
+                       "Supply Chain & Procurement",
+                       "Research, Teaching & Training",
+                       "Trades & Services",
+                       "Driver & Transport Services",
+                       "Health & Safety"]
+    for (var f = 0;f<26;f++) {
+       $("#functionss").append("<option value='"+functions[f]+"'>"+functions[f]+"</option>")
+       $("#functionsss").append("<option value='"+functions[f]+"'>"+functions[f]+"</option>")
+       
+    }
     
+    
+       for (var y = 2; y <= 10; y++) {
+           $("#yox").append("<option value='"+y+"'>"+y+"years</option>")
+          
+       }
+       $("#yox").append("<option value='11'>11 years and above</option>")
+           
+      
+           
+       for (var d = 1; d <= 31; d++) {
+           $("#select2").append("<option value='"+d+"'>"+d+"</option>")
+           
+           
+       }
+       var month = $(this).children().val();
+       
+    
+    $(".passbtn").click(function(){
+           $(this).attr("type","button")
+           $(this).siblings().attr("type","text")
+           $(this).hide()
+           $(this).siblings("button").show()
+            })
+    $(".passbtn2").click(function(){
+           $(this).attr("type","button")
+           $(this).siblings().attr("type","password")
+           $(this).hide()
+           $(this).siblings("button").show()
+    
+            })
+    $("#nextbtn").click(function(){
+    const fname = $("#firstname").val();
+    const lname = $("#lastname").val();
+    const number = $("#number").val();
+    const email = $("#email").val();
+    const pass1= $("#pass1").val();
+    const pass2= $("#pass2").val();
+    const select = $(".firsts").val();
+    const select1 = $(".firsts1").val();
+    const select2 = $(".firsts2").val();
+    const select3 = $(".firsts3").val();
+    const select4 = $("#gender").val();
+    
+    if(fname==""){
+        $("#paraone").show()
+        $("#firstname").focus()
+        }
+        else if(lname==""){
+            $("#para2").show()
+            $("#lastname").focus()
+        }else if(number==""||number.length <11){
+            $("#para3").show()
+            $("#number").focus()
+        }else if(email==""){
+            $("#para4").show()
+            $("#email").focus()
+        }else if(pass1==""||pass1.length <8){
+            $("#para5").show()
+            $("#pass1").focus()
+        }else if(pass2==""||pass1!=pass2){
+            $("#para6").show()
+            $("#pass2").focus()
+        }else if (select==""){
+            $("#para7").show()
+            $(".firsts").focus()
+        }else if (select1==""){
+            $("#para8").show()
+            $(".firsts1").focus()
+        }else if (select2==""){
+            $("#para9").show()
+            $(".firsts2").focus()
+        }else if (select4==""){
+            $("#para11").show()
+            $("#gender").focus()
+        }else if (select3==""){
+            $("#para10").show()
+            $(".firsts3").focus();
+        }else{
+            $(".secondform").slideDown(1000);
+            $(".firstform").slideUp(1000)
+            $("p").hide()
+        }
+        
+    
+   
+    
+    
+    
+    })
+    $("#prevbtn").click(function(){
+        $(".firstform").slideDown(1000);
+            $(".secondform").slideUp(1000)
+    })
+    $("#agree").click(function(){
+        var agreed = $(this).prop("checked");
+   if (agreed) {
+        
+        $("#submiting").removeAttr("disabled")
+   }else{
+    $("#submiting").attr("disabled")
 
+   }
+   $("#submiting").click(function(){
+   
+        $(this).attr("type","submit")
+        
+  
+   })
+    
+    })
+    $("#looginbtn").click(function(e){
+     
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if(username==""){
+            $("#para1").show();
+            $("#username").focus();
+            e.preventDefault();
+        }else if(password==""){
+            $("#paratwo").show();
+            $("#password").focus();
+            e.preventDefault();
+        }else{
+            $(this).attr("type","submit")
+        }
+    })
+})
+   
+    
+    </script>
+    <?php 
 
-        <script src="jquery-3.7.1.min.js"></script>
-    <script src="employer.js"></script>  
-   <script>
-     <?php
-
-
-?>
-   </script>
-    </body>
-</html>
+    require_once "partials/footer.php";

@@ -9,24 +9,24 @@ if($_POST['signup']){
     $password = sanitizer($_POST['password']);
     $password = password_hash($password, PASSWORD_BCRYPT);
     $compname = sanitizer($_POST['ogname']);
-    $state = sanitizer($_POST['states']);
+   // $state = sanitizer($_POST['states']);
 
-    if(empty($fullname) || empty($email) || empty($password) || empty($compname) || empty($state)){
+    if(empty($fullname) || empty($email) || empty($password) || empty($compname)){
         $_SESSION['errormsg'] = 'All Fields Required';
-        header('location:../../employer.php');
+        header('location:../../employer.php?step=signup');
         exit();
         die();
     }
     $employ = new Employer;
-    $signup = $employ->signup($fullname, $email, $password, $compname, $state);
+    $signup = $employ->signup($fullname, $email, $password, $compname);
     if($signup){
         $_SESSION['useronline'] = $signup;
         header('location:../employerdashboard.php');
     }else{
-        $_SESSION['errormsg'] = 'Unable To signup Please try Again';
-        header('location:../../employer.php');
+        
+        header('location:../../employer.php?step=signup');
     }
 }else{
     $_SESSION['errormsg'] = 'Complete the form to gain acces';
-    header('location:../../employer.php');
+    header('location:../../employer.php?step=signup');
 }

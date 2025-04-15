@@ -10,7 +10,7 @@
     require_once "partials/header.php";
 if(isset($_SESSION['feedback'])){
     echo '<div class="alert alert-success">'.$_SESSION['feedback'].'</div>';
-    session_unset();
+    unset($_SESSION['feedback']);
 }
 
 ?>
@@ -50,7 +50,7 @@ if(isset($_SESSION['feedback'])){
                         
                     
                     ?>
-                    
+                    <img src="../logos/<?php echo $fetchs['employer_companyLogo'] ?>" alt="" style="width: 100px;height: 100px;">
                     <h3 style="text-align: center;"><?php echo $fetchs['employer_companyName'] ?></h3>
                     <label for="">Role</label>
                     <input type="text" disabled class="form-control" value="<?php echo $fetchs['jobVacancy_title'] ?>">

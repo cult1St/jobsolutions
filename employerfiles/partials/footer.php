@@ -56,8 +56,24 @@
             })
            
 
+            $(".passbtn").click(function(){
+           $(this).attr("type","button")
+           $(this).siblings().attr("type","text")
+           $(this).hide()
+           $(this).siblings("button").show()
+            })
+    $(".passbtn2").click(function(){
+           $(this).attr("type","button")
+           $(this).siblings().attr("type","password")
+           $(this).hide()
+           $(this).siblings("button").show()
+    
+            })
+
         })
+
     </script>
+    <script src="ajaxserver.js"></script>
    
     <script src="../bootstrap/js/bootstrap.js"></script>
 </body>

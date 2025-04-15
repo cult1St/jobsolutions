@@ -16,15 +16,20 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="assets/css/styles.css" rel="stylesheet" />
         <link href="assets/fa/css/all.css" rel="stylesheet">
+        <style>
+            input{
+                border-top: none;
+            }
+        </style>
     </head>
-    <body class="bg-primary">
+    <body class="bg-secondary">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-lg-5">
-                                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div style="background-color: cadetblue;" class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Admin Login</h3></div>
                                     <div class="card-body">
                                         <?php
@@ -45,7 +50,7 @@
                                             
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 
-                                                <button type="submit" name="login" value="login" class="btn btn-primary col-12" >Login</button>
+                                                <button type="submit" name="login" value="login" class="btn btn-info col-12" >Login</button>
                                             </div>
                                         </form>
                                     </div>

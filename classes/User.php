@@ -61,17 +61,38 @@ class User extends Db
         }
 
     }
-    public function insert_user($jfname, $jlname, $email, $jpassword, $jDOB, $jphone, $jstate, $jgender){
+    public function insert_user($jfname, $jlname, $email, $jpassword, $jphone){
+            $sql1 = "SELECT jobSeeker_email FROM `job_seekers` WHERE jobSeeker_email = ?";
+            $stmt1 = $this->dbconn->prepare($sql1);
+            $stmt1->execute([$email]);
+            $resp = $stmt1->fetch(PDO::FETCH_ASSOC);
+            if($resp){
+                $_SESSION['errormsg']="Emali Already In Use";
+                header("location:../login.php");
+                return false;
+                die();
+            }else{
+                $sql1 = "SELECT jobSeeker_phone FROM `job_seekers` WHERE jobSeeker_phone = ?";
+            $stmt1 = $this->dbconn->prepare($sql1);
+            $stmt1->execute([$jphone]);
+            $resp = $stmt1->fetch(PDO::FETCH_ASSOC);
+            if($resp){
+                $_SESSION['errormsg']="Phone Already In Use";
+                header("location:../login.php");
+                return false;
+                die();
+            }else{
        try{
-        $sql = "INSERT INTO job_seekers(jobSeeker_firstName, jobSeeker_lastName, jobSeeker_email, jobSeeker_password, jobSeeker_DOB, jobSeeker_phone, jobSeeker_State_id, jobSeeker_gender) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO job_seekers(jobSeeker_firstName, jobSeeker_lastName, jobSeeker_email, jobSeeker_password, jobSeeker_phone) VALUES(?, ?, ?, ?, ?)";
         $stmt = $this->dbconn->prepare($sql);
-        $stmt->execute([$jfname, $jlname, $email, $jpassword, $jDOB, $jphone, $jstate, $jgender]);
+        $stmt->execute([$jfname, $jlname, $email, $jpassword, $jphone]);
         
         return $stmt;
 
        }catch(PDOException $e){
             echo "There is an error in your syntax: ".$e->getMessage();
        }
+    }   }
     }
     public function check_password($email, $jpassword){
         
@@ -118,20 +139,31 @@ class User extends Db
             echo "There is an error in you syntax".$e->getMessage();
         }
     }
-    public function fetch_vacancies_for_users2($cat){
+    public function fetch_vacancies_for_users2($cat, $state, $title){
+       // $cat = "%$cat%";
+       
         try{
-            $sql = "SELECT * FROM `job_vacancy` JOIN employers ON jobVacancy_employerId = employer_id WHERE jobCat_id = ? ";
+            $sql = "SELECT * FROM `job_vacancy` JOIN employers ON jobVacancy_employerId = employer_id JOIN state ON states_id =state_id JOIN lga ON lga = lga_id WHERE  states_id = ?";
             $stmt = $this->dbconn->prepare($sql);
-            $stmt->execute([$cat]);
+            $stmt->execute([$state]);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           if(empty($result)){
+            $_SESSION["searchmsg"] = "No jobs match your search, below are the jobs available";
+            $sql1 = "SELECT * FROM `job_vacancy` JOIN employers ON jobVacancy_employerId = employer_id JOIN state ON states_id =state_id JOIN lga ON lga = lga_id WHERE jobCat_id = ? AND states_id LIKE ? OR jobVacancy_title LIKE ?";
+            $stmt1 = $this->dbconn->prepare($sql1);
+            $stmt1->execute([$cat, $state, $title]);
+            $result = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             return $result;
+           }else{
+            return $result;
+           }
         }catch(PDOException $e){
             echo "There is an error in your syntax". $e->getMessage();
         }catch(Exception $e){
             echo "There is an error in your syntax". $e->getMessage();
         }
     }
-    public function update($phone, $email, $password, $qualification, $address, $cv, $id){
+    public function update($phone, $email, $password, $qualification, $address, $cv, $experience, $id){
         try{
             $temp = $cv['tmp_name'];
             $original = $cv['name'];
@@ -140,9 +172,29 @@ class User extends Db
             move_uploaded_file($temp, "../uploads/$newname");
 
 
-            $sql = "UPDATE `job_seekers` SET `jobSeeker_phone` = ?, jobSeeker_email = ?, jobSeeker_password = ?, jobSeeker_qualification = ?, jobSeeker_address = ?, jobSeeker_CV = ? WHERE `job_seekers`.`jobSeeker_id` = ?";
+            $sql = "UPDATE `job_seekers` SET `jobSeeker_phone` = ?, jobSeeker_email = ?, jobSeeker_password = ?, jobSeeker_qualification = ?, jobSeeker_address = ?, jobSeeker_CV = ?, jobSeeker_experience=? WHERE `job_seekers`.`jobSeeker_id` = ?";
             $stmt = $this->dbconn->prepare($sql);
-            $resp = $stmt->execute([$phone, $email, $password, $qualification, $address, $newname, $id]);
+            $resp = $stmt->execute([$phone, $email, $password, $qualification, $address, $newname,$experience, $id]);
+            return $resp;
+
+        }catch(PDOException $e){
+            echo "There is an error in your syntax".$e->getMessage();
+        }catch(Exception $e){
+            echo "Error in Your Syntax: ".$e->getMessage();
+        }
+    }
+    public function update_without_password($phone, $email, $qualification, $address, $cv, $experience, $id){
+        try{
+            $temp = $cv['tmp_name'];
+            $original = $cv['name'];
+            $r = explode(".", $original);
+            $newname = time().rand().".".$r[1];
+            move_uploaded_file($temp, "../uploads/$newname");
+
+
+            $sql = "UPDATE `job_seekers` SET `jobSeeker_phone` = ?, jobSeeker_email = ?, jobSeeker_qualification = ?, jobSeeker_address = ?, jobSeeker_CV = ?, jobSeeker_experience=? WHERE `job_seekers`.`jobSeeker_id` = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $resp = $stmt->execute([$phone, $email, $qualification, $address, $newname,$experience, $id]);
             return $resp;
 
         }catch(PDOException $e){
@@ -153,7 +205,15 @@ class User extends Db
     }
     public function apply($vacId, $seekerId, $cv){
         try{
-            $temp = $cv['tmp_name'];
+            $query = "SELECT * FROM jobseeker_application  WHERE application_jobVacancy_id = ? AND application_jobSeeker_id = ?";
+            $stmt = $this->dbconn->prepare($query);
+            $stmt->execute([$vacId, $seekerId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($result){
+                return false;
+           
+            }else{
+                $temp = $cv['tmp_name'];
             $original = $cv['name'];
             $r = explode(".", $original);
             $newname = time().rand().".".$r[1];
@@ -164,7 +224,68 @@ class User extends Db
             $stmt = $this->dbconn->prepare($sql);
             $resp = $stmt->execute([$vacId, $seekerId, $newname]);
             return $resp;
+            }
 
+        }catch(PDOException $e){
+            echo "There is an error in your syntax".$e->getMessage();
+        }catch(Exception $e){
+            echo "Error in Your Syntax: ".$e->getMessage();
+        }
+    }
+    
+    public function fetch_state(){
+        try{
+           $sql = "SELECT * FROM state";
+           $stmt = $this->dbconn->prepare($sql);
+           $stmt->execute();
+           $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           return $result;
+
+        }catch(PDOException $e){
+            echo "There is an error in your syntax".$e->getMessage();
+        }catch(Exception $e){
+            echo "Error in Your Syntax: ".$e->getMessage();
+        }
+    }
+    public function get_lga_by_state($id){
+        try{
+            $sql = "SELECT * FROM lga WHERE state_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([$id]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }catch(PDOException $e){
+            echo "There is an error in your syntax".$e->getMessage();
+        }catch(Exception $e){
+            echo "Error in Your Syntax: ".$e->getMessage();
+        }
+    }
+
+
+
+
+
+    public function get_state_by_id($id){
+        try{
+            $sql = "SELECT * FROM state WHERE state_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }catch(PDOException $e){
+            echo "There is an error in your syntax".$e->getMessage();
+        }catch(Exception $e){
+            echo "Error in Your Syntax: ".$e->getMessage();
+        }
+    }
+
+    public function get_lga_by_id($id){
+        try{
+            $sql = "SELECT * FROM lga WHERE lga_id = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $stmt->execute([$id]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
         }catch(PDOException $e){
             echo "There is an error in your syntax".$e->getMessage();
         }catch(Exception $e){

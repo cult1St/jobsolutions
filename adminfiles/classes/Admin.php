@@ -21,6 +21,9 @@
                     switch($check){
                         case true:
                             $_SESSION['adminonline'] = $result['admin_id'];
+                            $sql = 'UPDATE admin SET dateLastLoggedIn = CURRENT_TIMESTAMP WHERE admin_id = ?';
+                            $stmt = $this->dbconn->prepare($sql);
+                            $stmt->execute([$result['admin_id']]);
                             return 1;
                         break;
                         default:
@@ -71,7 +74,7 @@
         }
         public function fetch_applications(){
             try{
-                $sql = 'SELECT * FROM `jobseeker_application` JOIN job_vacancy ON application_jobVacancy_id = jobVacancy_id JOIN employers ON jobVacancy_employerId = employer_id';
+                $sql = 'SELECT * FROM `jobseeker_application` JOIN job_vacancy ON application_jobVacancy_id = jobVacancy_id JOIN job_seekers ON application_jobSeeker_id = job_seekers.jobSeeker_id JOIN employers ON jobVacancy_employerId = employer_id';
                 $stmt = $this->dbconn->prepare($sql);
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -93,10 +96,10 @@
                 return false;
             }
         }
-        public function delete_employer($id){
-            $sql = 'DELETE FROM employers WHERE `employers`.`employer_id` = ?';
+        public function block_employer($status, $id){
+            $sql = 'UPDATE employers SET status = ? WHERE employer_id = ?';
             $stmt = $this->dbconn->prepare($sql);
-            $resp = $stmt->execute([$id]);
+            $resp = $stmt->execute([$status, $id]);
             if($resp){
                 return true;
 
@@ -117,6 +120,12 @@
         }
         public function delete_admin($id){
             $sql = "DELETE FROM admin WHERE `admin`.`admin_id` = ?";
+            $stmt = $this->dbconn->prepare($sql);
+            $resp = $stmt->execute([$id]);
+            return $resp;
+        }
+        public function delete_jobVacancy($id){
+            $sql = "DELETE FROM job_vacancy WHERE `job_vacancy`.`jobVacancy_id` = ?";
             $stmt = $this->dbconn->prepare($sql);
             $resp = $stmt->execute([$id]);
             return $resp;

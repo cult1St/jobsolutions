@@ -33,6 +33,8 @@
             </div>
         </div>
         <div class="row"> -->
+            <div class="row"><div class="col-2"> <a href="viewapplications.php" class="btn btn-warning">Go Back</a></div>
+</div>
             <div class="col mt-5 card">
                 <div class="card-header">
                     <i class="fa fa-table"></i>

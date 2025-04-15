@@ -9,6 +9,7 @@
     if(isset($_SESSION['search'])){
         $fetches = $_SESSION['search'];
     }
+    
     ?>
     <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +77,7 @@
           session_destroy();
      }
    
-    require_once "partials/banner.php";
+    require_once "partials/banner_2.php";
 
 ?>
         <div class="row find">
@@ -87,7 +88,7 @@
                 <h2>
                     Register if you don't have an account
                 </h2>
-                <a href="login.html" class="btn btn-primary pb-3">Register</a>
+                <a href="login.php" class="btn btn-primary pb-3">Register</a>
             </div>
             <div class="col-12 col-md-5 m-3" >
                 <img src="images/jobs.jpeg" alt="jobimg" class="container">
@@ -95,37 +96,48 @@
         </div>
        <div class="row justify-content-center">
         <h1 style="text-align: center;">Jobs Available</h1>
+        
         <?php 
-        if(isset($_SESSION["search"])){
+        if(isset($_SESSION["searchmsg"])){
+            echo "<div class='alert alert-info'>".$_SESSION["searchmsg"]."</div>";
+            unset($_SESSION["searchmsg"]);
+        }
+        if(isset($_SESSION["search"]) && !empty( $_SESSION["search"] )){
         foreach($fetches as $fetch){
+            $exp_date = $fetch['dateClosed'];
+            $today_date = date('Y-m-d');
+            $exp_date = strtotime($exp_date);
+            $today_date = strtotime($today_date);
+            if($today_date<$exp_date){
+              
+            
         ?>
        
-       <div class="col-6 col-md-4" style="border: 1px solid black;border-radius: 30px;">
-       <form action="process/processapply.php" method="post" enctype="multipart/form-data">
+       <div class="col-6 col-md-4 m-2" style="border: 1px solid black;border-radius: 30px;">
+       
+       <img src="logos/<?php echo $fetch['employer_companyLogo'] ?>" alt="" style="width: 100px;height: 100px;">
                     <h3 style="text-align: center;"><?php echo $fetch['employer_companyName'] ?></h3>
-                    <input type="hidden" name="employerid" value="<?php echo $fetch['jobVacancy_employerId'] ?>">
-                    <input type="hidden" name="jobSeekerid" value="<?php echo $id ?>">
+                    
                     <label for="">Role</label>
-                    <input type="text" disabled class="form-control" value="<?php echo $fetch['jobVacancy_title'] ?>">
+                    <input type="text" disabled class="form-control" value="<?php echo ucfirst($fetch['jobVacancy_title']) ?>">
                     <label for="">Qualification</label>
-                    <input type="text" disabled class="form-control" value=" <?php echo $fetch['qualification'] ?>">
+                    <input type="text" disabled class="form-control" value=" <?php echo ucfirst($fetch['qualification']) ?>">
                     <p>Salary Range= <?php echo $fetch['vacancy_salaryRange'] ?></p>
-                    <p><?php echo $fetch['work_type'] ?></p>
-                    <p class="card card-body">Job Description: <?php echo $fetch['vacancy_description'] ?></p>
-                    <input type="hidden" name="jobVid" value="<?php echo $fetch['jobVacancy_id'] ?>">
-                    <input type="hidden" name="jobSid" value="<?php echo $id ?>">
-                    <div class="row">
-                        <div class="col">
-                            <input type="file" name="cv" id="cv" class="form-control my-3">
-                            <span class="text-secondary">Choose A file for your CV which must not Be above 10mb. pdf only</span>
-                        </div>
-                       </div>
-                    <button name="button" value="btn" type="submit" class="btn btn-primary mx-5">Apply</button>
-                    </form>
+                    
+                    <label for="">Location</label>
+                    <p>State:   <?php echo $fetch['state_name'] ?> Local Government Area: <?php echo $fetch['lga_name'] ?></p>
+           
+                      
+                    <a href="userfiles/viewjobs.php?jid=<?php echo $fetch['jobVacancy_id']?>"  type="submit" class="btn btn-primary mx-5">Apply</a>
+                  
         </div>
       
        <?php
+            }
         }
+        unset($_SESSION['search']);
+    }else{
+        echo "Search for a job";
     }
        ?>
        </div>
@@ -165,7 +177,7 @@
             <a href="#">Health & Safety</a>
             </div>
        
-            <div class="row" id="contact" >
+            <div class="row" id="contat" >
            <h3>Other ways to contact us</h3>
            <div class="col-md-6"  style="display: inline;">
             <a href="#"><img src="icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
@@ -195,7 +207,7 @@
         </div>
         <ul>
             <li><a href="userfiles/dashboard.php">Dashboard</a></li>
-            <li><a href="userfiles/usersettings.php">update information</a></li>
+            <li><a href="userfiles/view_applications.php">View Applications</a></li>
             <li><a href="userfiles/usersettings.php">settings</a></li>
             <li><a href="">Help</a></li>
         </ul>

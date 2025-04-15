@@ -6,7 +6,7 @@
      if(isset($_SESSION['user_id'])){
          $id = $_SESSION['user_id'];
          $user_id = $user->get_user_by_id($id);
-         echo "<h2 style='color:blue'>Welcome ".$user_id['jobSeeker_firstName']."</h2>";
+        
      }else{
          header("location:../login.php");
          
@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../fontawesome/css/all.css">
     <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
+    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
     <style>
         .savebtn,#savepassbtn{
@@ -54,6 +55,7 @@
 </head>
 <body>
     <div class="container">
+    <h2 class="text-primary">Welcome <?php echo $user_id['jobSeeker_firstName'] ?></h2>
       <h1 class="text-primary">Settings</h1>
       <div class="col-1 offset-md-11 mt-2">
         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
@@ -123,23 +125,29 @@
                                         <option value="phd">PHD(Doctor In Philosophy)</option>
                                     </select>
                                 </div>
-                                
-                                
-                               </div>
-                               <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="function1">Select Current Job Function</label>
-                                    <select name="function1" id="functionss" class="form-select">
-                                        <option value="" >Select Current</option>
+                                <div class="col">
+                                    <label for="">Experience</label>
+                                    <select name="experience" id="yox" class="form-select">
+                                        <option value="">Select Experience</option>
+                                        <?php 
+                                        for($i=1; $i<=10; $i++){
+                                            if($i<10){
+                                        ?>
+                                            <option <?php echo $user_id['jobSeeker_experience']==$i ? "selected" : "" ?> value="<?php echo $i?>"><?php echo $i?> Year(s)</option>
+                                        <?php 
+                                            }else{
+                                                ?>
+                                                <option  <?php echo $user_id['jobSeeker_experience']==$i ? "selected" : "" ?> value="<?php echo $i?>"><?php echo $i?> Years and Above</option>
+                                                <?php 
+                                        }
+                                    }
+                                        ?>
+                                        
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="function2">Select Desired Job Function</label>
-                                    <select name="function2" id="functionsss" class="form-select">
-                                        <option value="" >Select Desired</option>
-                                    </select>
-                                </div>
+                                
                                </div>
+                               
                                <div class="row">
                                 <div class="col">
                                     <div class="form-floating mb-3">
@@ -209,7 +217,8 @@
             </div>
             <ul>
                 <li><a href="../employeepage.php">Home</a></li>
-                <li><a href="usersettings.php">update information</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="view_applications.php">View Applications</a></li>
                 <li><a href="usersettings.php">settings</a></li>
                 <li><a href="">Help</a></li>
             </ul>
@@ -225,5 +234,8 @@
         <script src="../jquery-3.7.1.min.js"></script>
     
     <script src="../bootstrap/js/bootstrap.js"></script>
+    <script>
+       
+    </script>
     </body>
 </html>

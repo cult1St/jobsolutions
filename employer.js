@@ -119,7 +119,7 @@ $(document).ready(function(){
    $("#submiting").click(function(){
     
         $(this).attr("type","submit")
-        alert("Account Created Successfully")
+       
     
    })
     

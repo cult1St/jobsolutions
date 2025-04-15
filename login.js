@@ -50,10 +50,7 @@ $(document).ready(function(){
        
     }
     
-    for (var k = 1959; k <= 2024; k++) {
-           $("#select").append("<option value='"+k+"'>"+k+"</option>")
-           
-       }
+    
        for (var y = 2; y <= 10; y++) {
            $("#yox").append("<option value='"+y+"'>"+y+"years</option>")
           
@@ -147,9 +144,13 @@ $(document).ready(function(){
             $(".secondform").slideUp(1000)
     })
     $("#agree").click(function(){
-        var agreed = $("#agree").prop("checked");
-   if (agreed== true) {
+        var agreed = $(this).prop("checked");
+   if (agreed) {
+        
         $("#submiting").removeAttr("disabled")
+   }else{
+    $("#submiting").attr("disabled")
+
    }
    $("#submiting").click(function(){
    
@@ -159,15 +160,18 @@ $(document).ready(function(){
    })
     
     })
-    $("#looginbtn").click(function(){
+    $("#looginbtn").click(function(e){
+     
         var username = $("#username").val();
         var password = $("#password").val();
         if(username==""){
             $("#para1").show();
             $("#username").focus();
+            e.preventDefault();
         }else if(password==""){
             $("#paratwo").show();
             $("#password").focus();
+            e.preventDefault();
         }else{
             $(this).attr("type","submit")
         }

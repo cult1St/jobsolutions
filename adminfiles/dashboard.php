@@ -32,7 +32,9 @@ if(isset($_SESSION["feedback"])){
     unset($_SESSION["feedback"]);
 }
                             ?>
+                            <div id="msg"></div>
                             <div class="col-xl-3 col-md-6">
+                                
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">List of Job Seekers</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -128,7 +130,7 @@ if(isset($_SESSION["feedback"])){
                                                     <?php echo $fetch['jobSeeker_experience'] ?>
                                                     </td>
                                                     <td>
-                                                        <form action="delete.php" method="post" >
+                                                        <form action="delete.php" id="employ" method="post" >
                                                             <input type="hidden" name="id" value="<?php echo $fetch['jobSeeker_id'] ?>">
                                                             <button type="submit" name="delete" value="delete" class="delete btn btn-danger">Delete</button>
                                                         </form>
@@ -173,6 +175,9 @@ if(isset($_SESSION["feedback"])){
                                                     <th>
                                                         Date and Time Registered
                                                     </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -197,15 +202,16 @@ if(isset($_SESSION["feedback"])){
                                                     <?php echo $fetch['state_name'] ?>
                                                     </td>
                                                     <td>
-                                                    <?php echo $fetch['employer_companyLogo'] ?>
+                                                    <img src="../logos/<?php echo $fetch['employer_companyLogo'] ?>" alt="" style="width: 100px;height: 100px;">
                                                     </td>
                                                     <td>
                                                     <?php echo $fetch['dateRegistered'] ?>
                                                     </td>
-                                                    <td>
-                                                        <form action="delete.php" method="post" >
+                                                    <td class="col-2">
+                                                        <form enctype="multipart/form-data" action="" class="pp" method="post" >
                                                             <input type="hidden" name="id" value="<?php echo $fetch['employer_id'] ?>">
-                                                            <button type="submit" name="deleteemp" value="delete" class="delete btn btn-danger">Delete</button>
+                                                            <input <?php echo $fetch['status']==1 ? "checked" : "" ?> type="radio" name="status" id="status" value="1" class="form-check-input">Enable
+                                                           <p><input style="float: left;" <?php echo $fetch['status']==0 ? "checked" : "" ?> type="radio" name="status" id="status" value="0" class="form-check-input">Disable</p>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -288,7 +294,7 @@ if(isset($_SESSION["feedback"])){
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                            <div class="text-muted">Copyright &copy; <i>My Job Solutions</i>  <?php print date("Y") ?></div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;
@@ -338,8 +344,40 @@ if(isset($_SESSION["feedback"])){
                     event.preventDefault();
                    }
                 })
+               $(".pp").change(function(event){
+                event.preventDefault();
+                var formData = new FormData(this);
+           $.ajax({
+            url: "process/disableserver.php",
+            method: "post",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function(res){
+                       if(res.success==true){
+                        $("#msg").show()
+                        $("#msg").addClass("alert")
+                        $("#msg").removeClass("alert-danger")
+                        $("#msg").addClass("alert-success")
+                        $("#msg").html(res.msg)
+                       }else{
+                        $("#msg").show()
+                        $("#msg").addClass("alert")
+                        $("#msg").removeClass("alert-success")
+                        $("#msg").addClass("alert-danger")
+                        $("#msg").html(res.msg)
+                       }
+                    }
+                })
+               })
+                
 
             })
+        </script>
+        <script>
+             
         </script>
     </body>
 </html>
