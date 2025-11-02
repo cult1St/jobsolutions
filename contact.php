@@ -4,6 +4,7 @@ $employer = new Employer;
 require_once "classes/User.php";
 $user = new User;
 $fetchss = $employer->fetch_vacancies_for_users();
+$active_page = 'contact';
 require_once "partials/header.php";
 
 ?>
@@ -70,7 +71,7 @@ require_once "partials/header.php";
       </div>
       <div class="col-md-8">
         <div class="contact-form">
-          <form id="contact" action="/contact/submit" method="post">
+          <form id="contact" action="#" method="post">
             <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset>
@@ -112,6 +113,35 @@ require_once "partials/header.php";
   </div>
 </div>
 
+
+<script>
+  $(document).ready(function () {
+    $("#contact").submit(function (e) {
+      e.preventDefault();
+      var formData = $(this).serialize();
+      $.ajax({
+        url: 'ajax_calls.php',
+        method: 'post',
+        data: formData,
+        dataType: 'json',
+        success: function (res) {
+          alert(res.message);
+          if(res.success == true){
+            var fields = ['name', 'email', 'subject', 'message'];
+
+            fields.forEach((v, i) => {
+              document.getElementById(v).value = '';
+            })
+          }
+        },
+        error: function (xhr, request, error) {
+          alert('An Error Occurred');
+          console.log(xhr, request, error);
+        }
+      })
+    });
+  });
+</script>
 <?php
 require_once "partials/footer.php";
 ?>

@@ -4,6 +4,7 @@ $employer = new Employer;
 require_once "classes/User.php";
 $user = new User;
 $fetchss = $employer->fetch_vacancies_for_users();
+$active_page = 'about';
 require_once "partials/header.php";
 
 ?>

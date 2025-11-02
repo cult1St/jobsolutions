@@ -21,6 +21,8 @@ if (!function_exists('base_url')) {
     return $protocol . '://' . $host . $basePath . "/" . $url;
   }
 }
+
+$active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'home'; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,17 +81,17 @@ if (!function_exists('base_url')) {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                   <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item <?= $active_page == 'home' ? 'active' : '' ?>">
                       <a class="nav-link" href="index.php">Home
 
                       </a>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" href="<?= base_url('jobs.php') ?>">Jobs</a></li>
+                    <li class="nav-item <?= $active_page == 'jobs' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('jobs.php') ?>">Jobs</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="<?= base_url('about.php') ?>">About us</a></li>
+                    <li class="nav-item <?= $active_page == 'about' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('about.php') ?>">About us</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= base_url() ?>">Blog</a></li>
 
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
@@ -109,7 +111,7 @@ if (!function_exists('base_url')) {
                       </div>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" href="<?= base_url('contact.php') ?>">Contact Us</a></li>
+                    <li class="nav-item <?= $active_page == 'contact' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('contact.php') ?>">Contact Us</a></li>
                   </ul>
                 </div>
               </div>
