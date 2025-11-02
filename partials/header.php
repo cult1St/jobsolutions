@@ -95,7 +95,7 @@ $active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'h
 
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
-                        aria-haspopup="true" aria-expanded="false">More</a>
+                        aria-haspopup="true" aria-expanded="false">Sign In</a>
 
                       <div class="dropdown-menu">
                         <?php

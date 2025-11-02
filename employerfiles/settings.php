@@ -1,76 +1,112 @@
 <?php
 session_start();    
-    require_once "partials/header.php";
-
+$active = 'settings';
+require_once "partials/header.php";
 ?>
 
+<div class="container-xxl flex-grow-1 container-p-y">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h4 class="fw-bold text-primary">Account Settings</h4>
+      <p class="text-muted">Update your password, organization name, and logo below.</p>
+    </div>
+  </div>
 
+  <!-- Feedback Message -->
+  <?php if (isset($_SESSION["errormsg"])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      <?= $_SESSION["errormsg"]; unset($_SESSION["errormsg"]); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif; ?>
 
-        <div style="border: 0.1px solid black; background-color: rgb(250, 251, 251); border-radius: 30px;">
-            <h1 class="text-secondary" style="text-align: center;">Change settings</h1>
-          
+  <!-- Settings Form -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-light py-3">
+      <h5 class="mb-0 fw-semibold">
+        <i class="bx bx-cog me-2 text-primary"></i>Change Settings
+      </h5>
+    </div>
 
-           <div class="col-12  signup">
-                <div class="row">
-                    <div class="col-8 offset-2">
-                        <?php
-    if (isset($_SESSION["errormsg"])) {
-        echo "<div class='alert alert-danger'>". $_SESSION["errormsg"] ."</div>";
-        unset($_SESSION["errormsg"]);
-    }
-                        ?>
-                       
-                        <form action="process/processupdate.php" method="post" enctype="multipart/form-data">
-                           <div class="firstform">
-                            <label for="pass1">Change Password</label>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control" placeholder="Enter Your Password" id="pass1" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
+    <div class="card-body">
+      <form action="process/processupdate.php" method="post" enctype="multipart/form-data">
+        <div class="row g-4">
+          <!-- Password Fields -->
+          <div class="col-12">
+            <label for="pass1" class="form-label fw-semibold">Change Password</label>
+            <div class="input-group">
+              <input type="password" class="form-control" id="pass1" placeholder="Enter new password" required>
+              <button class="btn btn-outline-secondary passbtn" type="button">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+              <button class="btn btn-outline-secondary passbtn2" type="button" style="display:none;">
+                <i class="fa-regular fa-eye-slash"></i>
+              </button>
+            </div>
+            <p class="text-danger small mt-1 d-none" id="para5">Enter password</p>
+          </div>
 
-                              </div>
-                              <p style="color: red;display: none;" id="para5" >Enter password</p>
-                              <label for="pass2">Confirm Password</label>
-                              <div class="input-group mb-3">
-                                <input type="password" name="password" class="form-control" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
+          <div class="col-12">
+            <label for="pass2" class="form-label fw-semibold">Confirm Password</label>
+            <div class="input-group">
+              <input type="password" name="password" class="form-control" id="pass2" placeholder="Confirm password" required>
+              <button class="btn btn-outline-secondary passbtn" type="button">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+              <button class="btn btn-outline-secondary passbtn2" type="button" style="display:none;">
+                <i class="fa-regular fa-eye-slash"></i>
+              </button>
+            </div>
+            <p class="text-danger small mt-1 d-none" id="para6">Passwords must match</p>
+          </div>
 
-                              </div>      
-                              <p style="color: red;display: none;" id="para6">password should be the same with confirm password</p>                     
-                            
-                              <label for="ogname">change Name Of Organisation</label>
-                              <input type="text" name="ogname" id="ogname" placeholder="Enter Your Organisation Name" class="form-control m-2">
-                              <p style="color: red;display: none;" id="parafour">please input your firstname</p>
-                              
-                            <div class="row mb-3">
-                                <label for="logo">Put Your Logo</label>
-                                <input type="file" name="logo" id="" class="form-control">
-                            </div>
-                            <input type="hidden" name="id" value="<?php echo $_SESSION['useronline']?>">
-                            <div class="mb-3">
-                                <input type="submit" value="Update" name="update" class="btn btn-primary">
-                            </div>                         
-                             
-                        </form>
-                    </div>
-                </div>
-                </div>
-                </div>
-           </div>
+          <!-- Organization Name -->
+          <div class="col-md-6">
+            <label for="ogname" class="form-label fw-semibold">Organization Name</label>
+            <input type="text" name="ogname" id="ogname" class="form-control" placeholder="Enter your organization name">
+            <p class="text-danger small mt-1 d-none" id="parafour">Please input your organization name</p>
+          </div>
 
+          <!-- Logo Upload -->
+          <div class="col-md-6">
+            <label for="logo" class="form-label fw-semibold">Upload Logo</label>
+            <input type="file" name="logo" id="logo" class="form-control">
+          </div>
 
+          <input type="hidden" name="id" value="<?php echo $_SESSION['useronline']; ?>">
 
-<?php
+          <!-- Submit -->
+          <div class="col-12 text-end">
+            <button type="submit" name="update" class="btn btn-primary px-4">
+              <i class="bx bx-save me-2"></i>Update Settings
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-require_once "partials/footer.php";
-?>
+<!-- Password Toggle Script -->
+<script src="../jquery-3.7.1.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Toggle eye icons for password fields
+  $(".passbtn").click(function() {
+    const input = $(this).siblings("input");
+    input.attr("type", "text");
+    $(this).hide();
+    $(this).siblings(".passbtn2").show();
+  });
 
+  $(".passbtn2").click(function() {
+    const input = $(this).siblings("input");
+    input.attr("type", "password");
+    $(this).hide();
+    $(this).siblings(".passbtn").show();
+  });
+});
+</script>
 
-
-
-
-
-
-
-      
+<?php require_once "partials/footer.php"; ?>

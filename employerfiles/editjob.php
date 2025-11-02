@@ -1,156 +1,174 @@
 <?php
-    session_start();
-    if (isset($_POST['id'])){
-        $id = $_POST['id'];
-        $_SESSION['editid'] = $id;
-    }
+session_start();
 
-    require_once "userguard.php";
-    require_once "../classes/Employer.php";
-    $cat1 = new Employer;
-    $cats = $cat1->fetch_cat() ;
-    $states = $cat1->fetch_state() ;
-    $fetch = $cat1->selectVacancyById($id) ;
-    //get the price ad seperate into min and max
-    $price = $fetch['vacancy_salaryRange'];
-    //explode
-    $price_arr = explode("-", $price);
-    //var_dump($fetch);
-    require_once "partials/header.php";
+if (isset($_POST['id'])) {
+    $id = $_POST['id'];
+    $_SESSION['editid'] = $id;
+}
 
+require_once "userguard.php";
+require_once "../classes/Employer.php";
+
+$cat1 = new Employer;
+$cats = $cat1->fetch_cat();
+$states = $cat1->fetch_state();
+$fetch = $cat1->selectVacancyById($id);
+
+// Split salary range
+$price_arr = explode("-", $fetch['vacancy_salaryRange']);
+
+require_once "partials/header.php";
 ?>
-  
-     
-      <div class="row justify-content-center">
-        <div class="col-8">
-            <h3 class="text-info">
-                Post a job
-            </h3>
-            <form action="process/editprocess.php" method="post" class="form-control">
-                <div class="form-floating mb-3">
-                    <input type="text" name="role" id="" class="form-control" value="<?php echo $fetch['jobVacancy_title']  ?>">
-                    <label for="role">Change Role</label>
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" name="qualification" id="" class="form-control" value="<?php echo $fetch['qualification']  ?>">
-                    <label for="qualification">Change Qualification</label>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="number" name="low" id="low" class="form-control" value="<?= $price_arr[0] ?>" placeholder="Minimum">-
-                    <input type="number" name="high" id="high" class="form-control" value="<?= $price_arr[1] ?>" placeholder="Maximum">
-                </div>
-                <div class="form-floating mb-3">
-                    <input type="text" name="type" id="" class="form-control" value="<?php echo $fetch['work_type']  ?>">
-                    <label for="type">Change Work Type</label>
-                </div>
-                <div class="mb-3">
-                    <input type="date" name="closingdate" id="date" class="form-control" value="<?php echo $fetch['dateClosed']  ?>">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" name="desc" id="desc" cols="30" rows="10" placeholder="Enter Job Description" value="<?php echo $fetch['vacancy_description']  ?>"><?php echo $fetch['vacancy_description']  ?></textarea>
-                </div>
-                <div class="mb-3">
-                    <select name="cat" id="cat" class="form-select">
-                        <option value="">Select Job Category</option>
-                        <?php
-                        foreach ($cats as $cat) {
-                           
-                        ?>
-                        
-                        <option <?php echo $cat['jobCat_id'] == $fetch['jobCat_id'] ? "selected" : "";  ?> value="<?php echo $cat['jobCat_id'] ?>"><?php echo $cat['jobCat_name'] ?></option>
 
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <select name="states" id="state" class="form-select">
-                        <option value="">Select State</option>
-                        <?php
-                        foreach ($states as $state) {
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold text-primary"><i class="bx bx-edit-alt"></i> Edit Job Posting</h4>
+    <a href="viewapplications.php" class="btn btn-outline-secondary">
+      <i class="bx bx-arrow-back"></i> Back to Jobs
+    </a>
+  </div>
 
-                        ?>
-                        <option <?php echo $state['state_id'] == $fetch['states_id'] ? "selected" : "" ?> value="<?php echo $state['state_id'] ?>"><?php echo $state['state_name'] ?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div id="view"></div>
-                <div class="mb-3" id="lgadiv" style="display:none">
-                <label for="">Local Government Area</label>
-                        <select name="lga" id="lga" class="form-select">
-                           
-                        </select>
-                </div>
-                <div class="m-2">
-                    <button type="submit" name="submit" value="submit" class="btn btn-primary">Post</button>
-                </div>
-            </form>
+  <div class="card shadow-sm p-4">
+    <form action="process/editprocess.php" method="post" id="editJobForm">
+      <div class="row g-3">
+        <!-- Role -->
+        <div class="col-md-6">
+          <label for="role" class="form-label fw-semibold">Role</label>
+          <input type="text" name="role" id="role" class="form-control" 
+                 value="<?= htmlspecialchars($fetch['jobVacancy_title']); ?>" placeholder="Job title">
+        </div>
+
+        <!-- Qualification -->
+        <div class="col-md-6">
+          <label for="qualification" class="form-label fw-semibold">Qualification</label>
+          <input type="text" name="qualification" id="qualification" class="form-control"
+                 value="<?= htmlspecialchars($fetch['qualification']); ?>" placeholder="Required qualification">
+        </div>
+
+        <!-- Salary Range -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Salary Range</label>
+          <div class="input-group">
+            <input type="number" name="low" id="low" class="form-control" 
+                   value="<?= $price_arr[0]; ?>" placeholder="Minimum">
+            <span class="input-group-text">-</span>
+            <input type="number" name="high" id="high" class="form-control" 
+                   value="<?= $price_arr[1]; ?>" placeholder="Maximum">
+          </div>
+        </div>
+
+        <!-- Work Type -->
+        <div class="col-md-6">
+          <label for="type" class="form-label fw-semibold">Work Type</label>
+          <input type="text" name="type" id="type" class="form-control"
+                 value="<?= htmlspecialchars($fetch['work_type']); ?>" placeholder="Full-time, Remote, etc.">
+        </div>
+
+        <!-- Closing Date -->
+        <div class="col-md-6">
+          <label for="date" class="form-label fw-semibold">Closing Date</label>
+          <input type="date" name="closingdate" id="date" class="form-control" 
+                 value="<?= htmlspecialchars($fetch['dateClosed']); ?>">
+        </div>
+
+        <!-- Job Description -->
+        <div class="col-12">
+          <label for="desc" class="form-label fw-semibold">Job Description</label>
+          <textarea name="desc" id="desc" class="form-control" rows="5"
+                    placeholder="Describe the job role, responsibilities, and expectations"><?= htmlspecialchars($fetch['vacancy_description']); ?></textarea>
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-6">
+          <label for="cat" class="form-label fw-semibold">Job Category</label>
+          <select name="cat" id="cat" class="form-select">
+            <option value="">Select Category</option>
+            <?php foreach ($cats as $cat): ?>
+              <option value="<?= $cat['jobCat_id']; ?>" 
+                      <?= $cat['jobCat_id'] == $fetch['jobCat_id'] ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($cat['jobCat_name']); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <!-- State -->
+        <div class="col-md-6">
+          <label for="state" class="form-label fw-semibold">State</label>
+          <select name="states" id="state" class="form-select">
+            <option value="">Select State</option>
+            <?php foreach ($states as $state): ?>
+              <option value="<?= $state['state_id']; ?>" 
+                      <?= $state['state_id'] == $fetch['states_id'] ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($state['state_name']); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <!-- LGA -->
+        <div class="col-md-6" id="lgadiv" style="display:none;">
+          <label for="lga" class="form-label fw-semibold">Local Government Area</label>
+          <select name="lga" id="lga" class="form-select"></select>
+        </div>
+
+        <div id="view" class="col-12"></div>
+
+        <!-- Submit Button -->
+        <div class="col-12 mt-4">
+          <button type="submit" name="submit" value="submit" class="btn btn-primary">
+            <i class="bx bx-save"></i> Save Changes
+          </button>
         </div>
       </div>
+    </form>
+  </div>
+</div>
 
-      <script src="../jquery-3.7.1.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(".ff").hover(function(){
-                $(this).children("div").slideToggle(100).siblings("a").children("span").toggleClass("fa-xmark")
-            })
-           
+<!-- jQuery -->
+<script src="../jquery-3.7.1.min.js"></script>
 
-            $(".passbtn").click(function(){
-           $(this).attr("type","button")
-           $(this).siblings().attr("type","text")
-           $(this).hide()
-           $(this).siblings("button").show()
-            })
-    $(".passbtn2").click(function(){
-           $(this).attr("type","button")
-           $(this).siblings().attr("type","password")
-           $(this).hide()
-           $(this).siblings("button").show()
-    
-            })
-            $("#state").change(function(){
-                var state_id = $("#state").val();
-                $.ajax({
-                    url: "process/ajaxserver.php",
-                    method: "post",
-                    data: state_id,
-                    dataType: "json",
-                    success: function(res){
-                        if(res.success==false){
-                            $("#view").show()
-                            $("#view").html("<div class='alert alert-danger'>"+res.message+"</div>")
-                            $("#lgadiv").hide();
-                        $("#lga").empty();
-                        }else{
-                            $("#view").hide()
-                        $("#lgadiv").show();
-                        $("#lga").empty();
-                      res.forEach(element => {
-                        $("#lga").append("<option value='"+element['lga_id']+"'>"+element['lga_name']+"</option>")
-                      });}
-                        
-                    },
-                })
-            })
+<script>
+$(document).ready(function() {
 
-        })
+  // State → LGA dynamic load
+  $("#state").change(function() {
+    const state_id = $(this).val();
+    if (!state_id) return;
 
-    </script>
-   
-    <script src="../bootstrap/js/bootstrap.js"></script>
-</body>
-</html>   
+    $("#view").html("<div class='alert alert-info py-2'><i class='bx bx-loader-circle bx-spin'></i> Loading LGAs...</div>");
+    $("#lgadiv").hide();
 
+    $.ajax({
+      url: "process/ajaxserver.php",
+      method: "POST",
+      data: { state_id: state_id },
+      dataType: "json",
+      success: function(res) {
+        $("#view").hide();
+        $("#lga").empty();
 
+        if (res.success === false) {
+          $("#view").show().html("<div class='alert alert-danger py-2'>" + res.message + "</div>");
+          $("#lgadiv").hide();
+        } else {
+          $("#lgadiv").show();
+          res.forEach(element => {
+            $("#lga").append("<option value='" + element['lga_id'] + "'>" + element['lga_name'] + "</option>");
+          });
+        }
+      },
+      error: function() {
+        $("#view").html("<div class='alert alert-danger py-2'>An error occurred loading LGAs.</div>");
+      }
+    });
+  });
 
+  // Form submission confirmation
+  $("#editJobForm").on("submit", function() {
+    return confirm("Are you sure you want to update this job posting?");
+  });
+});
+</script>
 
-
-
-
-
-
-      
+<?php require_once "partials/footer.php"; ?>

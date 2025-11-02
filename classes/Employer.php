@@ -292,4 +292,12 @@ class Employer extends User
         $stmt->execute([date("Y-m-d")]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function count_applications($job_id){
+        $sql = "SELECT COUNT(*) as applicant_count FROM `jobseeker_application` WHERE application_jobVacancy_id = ?";
+        $stmt = $this->dbconn->prepare($sql);
+        $stmt->execute([$job_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['applicant_count'];
+    }
 }

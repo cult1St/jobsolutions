@@ -1,241 +1,191 @@
 <?php
-    session_start();
-    require_once "../classes/User.php";
-    require_once "userguard.php";
-     $user = new User;
-     if(isset($_SESSION['user_id'])){
-         $id = $_SESSION['user_id'];
-         $user_id = $user->get_user_by_id($id);
-        
-     }else{
-         header("location:../login.php");
-         
-     }
-   
-   
+session_start();
+require_once "../classes/User.php";
+require_once "userguard.php";
 
+$user = new User;
+
+if (isset($_SESSION['user_id'])) {
+  $id = $_SESSION['user_id'];
+  $user_id = $user->get_user_by_id($id);
+} else {
+  header("location:../login.php");
+  exit;
+}
+
+$active = 'settings';
+require_once 'partials/header.php';
 ?>
 
+<!-- Sneat Rebrand: Profile Settings Page -->
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My job Solutions web is a website with the sole imterest of helping Nigerians get a job of their choice without the stress of going about with their CVs ">
-    <meta name="keywords" content="jobs in lagos">
-    <meta property="og:image" content="images/logo">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../fontawesome/css/all.css">
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <style>
-        .savebtn,#savepassbtn{
-            display: none;
-        }
-        .myoff ul li a{
-            
-            text-decoration: none;
-            color: rgb(95, 89, 89);
-            
-            
-        }
-        .myoff ul li{
-            list-style-type: none;
-            
-
-        }
-
-
-    </style>
-    
-    <title>My Job Solutions</title>
-   
-</head>
-<body>
-    <div class="container">
-    <h2 class="text-primary">Welcome <?php echo $user_id['jobSeeker_firstName'] ?></h2>
-      <h1 class="text-primary">Settings</h1>
-      <div class="col-1 offset-md-11 mt-2">
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-          <span class="fa-regular fa-user"></span>
-        </button>
-      
-  </div>
-        <div style="border: 0.1px solid black; background-color: rgb(250, 251, 251); border-radius: 30px;">
-     
-
-           <div class="col-12  signup">
-                <div class="row">
-                    <div class="col-8 offset-2">
-                    <form action="../process/updateprocess.php" method="post" enctype="multipart/form-data">
-                           <div class="firstform">
-                            <div>
-                            <label for="number">Change phone Number</label>
-                            <input  value="<?php echo $user_id['jobSeeker_phone'] ?>" type="text" name="number" id="number" placeholder="Enter Your Phone Number" class="form-control m-2">
-                            <p style="color: red;display: none;" id="para3" >Enter a valid number</p>
-                            <!-- <button type="button" class="btn btn-secondary editbtn">Edit</button>
-                            <button type="button" class="btn btn-secondary savebtn">Save</button> -->
-                            </div>
-                            <div>
-                            <p><label for="email">Update Email</label></p>
-                            <input  value="<?php echo $user_id['jobSeeker_email'] ?>"  type="email" name="email" id="email" placeholder="enter Your Email" class="form-control m-2" >
-                            <p style="color: red;display: none;" id="para4">Enter Your Email</p>
-                            <!-- <button type="button" class="btn btn-secondary editbtn">Edit</button>
-                            <button type="button" class="btn btn-secondary savebtn">Save</button> -->
-
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                <label for="pass1">Change Password</label>
-                            <div class="input-group mb-3">
-                                <input    type="password" class="form-control" placeholder="Enter Your Password" id="pass1" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
-
-                              </div>
-                              <p style="color: red;display: none;" id="para5" >Enter password</p>
-                              <label for="pass2">Confirm Password</label>
-                              <div class="input-group mb-3">
-                                <input  type="password" class="form-control" name="password" id="pass2" placeholder="Enter Your Password" aria-label="Recipient's username" aria-describedby="button-addon2">
-                                <button class="btn btn-outline-secondary passbtn" type="button" id="button-addon2"><span class="fa-regular fa-eye"></span></button>
-                                <button class="btn btn-outline-secondary passbtn2" type="button" id="button-addon2" style="display: none;"><span class="fa-regular fa-eye-slash"></span></button>
-
-                              </div>      
-                              <!-- <button type="button" class="btn btn-secondary" id="editbtn">Change</button>
-                            <button type="button" class="btn btn-secondary" id="savebtn">save Password</button> -->
-
-                              <p style="color: red;display: none;" id="para6">password should be the same with confirm password</p>                     
-                             
-                           
-                                </div>
-                            </div>
-                            
-                               <div class="row">
-                                <div class="col">
-                                    <label for="qualification">Qualification</label>
-                                    <select name="qualification"  id="qualification" class="form-select">
-                                        <option  value="">Select Qualification</option>
-                                        <option value="olevel">O-Level / SSCE</option>
-                                        <option value="nce">NCE</option>
-                                        <option value="nd">National Diploma</option>
-                                        <option value="bsc">BSC(Bachelor In Science)</option>
-                                        <option value="msc">MSC(Master In Science)</option>
-                                        <option value="phd">PHD(Doctor In Philosophy)</option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="">Experience</label>
-                                    <select name="experience" id="yox" class="form-select">
-                                        <option value="">Select Experience</option>
-                                        <?php 
-                                        for($i=1; $i<=10; $i++){
-                                            if($i<10){
-                                        ?>
-                                            <option <?php echo $user_id['jobSeeker_experience']==$i ? "selected" : "" ?> value="<?php echo $i?>"><?php echo $i?> Year(s)</option>
-                                        <?php 
-                                            }else{
-                                                ?>
-                                                <option  <?php echo $user_id['jobSeeker_experience']==$i ? "selected" : "" ?> value="<?php echo $i?>"><?php echo $i?> Years and Above</option>
-                                                <?php 
-                                        }
-                                    }
-                                        ?>
-                                        
-                                    </select>
-                                </div>
-                                
-                               </div>
-                               
-                               <div class="row">
-                                <div class="col">
-                                    <div class="form-floating mb-3">
-                                        <textarea name="address" id="add" cols="30" rows="10" class="form-control" value="<?php echo $user_id['jobSeeker_Address'] ?>"><?php echo $user_id['jobSeeker_Address'] ?></textarea>
-                                        <label for="address">Address</label>
-                                    </div>
-                                </div>
-                               </div>
-                               <div class="row">
-                                <div class="col">
-                                    <input type="file" name="cv" id="cv" class="form-control my-3">
-                                    <span class="text-secondary">Choose A file for your CV which must not Be above 10mb. pdf only</span>
-                                </div>
-                               </div>
-                               <div class="row">
-                                <div class="form-check">
-                                
-                                    <button type="submit" name="save" value="save" class="btn btn-outline-primary" id="submiting" >save Settings</button>
-                                  </div>
-                               </div>
-                           </div>
-                        </form>
-                    </div>
-                </div>
-           </div>
-           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="row" >
-            <h1>Other ways to contact us</h1>
-            <div class="col-md-6"  style="display: inline;">
-             <a href="#"><img src="../icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
-             <a href="#"><img src="../icons/instagram.png" alt="instagram link" class="img-fluid"  style="width: 30px;"></a>
-             <a href="#"><img src="../icons/whatsapp.png" alt="whatsapp link" class="img-fluid"  style="width: 30px;"></a>
-            </div>
-           
-            <div class="col-12">
-             <p class=""> &copy;copyright 2024.All rights Reserved</p>
-            </div>
-            
-            </div>
-         </div>
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Profile Settings</h5>
         </div>
 
+        <div class="card-body">
+          <form id="settingsForm" action="../process/updateprocess.php" method="post" enctype="multipart/form-data">
 
+            <!-- Phone Number -->
+            <div class="mb-3">
+              <label for="number" class="form-label fw-semibold">Phone Number</label>
+              <input type="text" class="form-control" id="number" name="number"
+                     value="<?= $user_id['jobSeeker_phone'] ?>" placeholder="Enter your phone number" />
+              <small id="para3" class="text-danger d-none">Enter a valid number</small>
+            </div>
 
-        <div class="offcanvas offcanvas-end myoff" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header">
-                <h3 style="text-align: center;">Account Information</h3>        
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Email</label>
+              <input type="email" class="form-control" id="email" name="email"
+                     value="<?= $user_id['jobSeeker_email'] ?>" placeholder="Enter your email" />
+              <small id="para4" class="text-danger d-none">Enter a valid email address</small>
+            </div>
+
+            <!-- Passwords -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="pass1" class="form-label fw-semibold">New Password</label>
+                <div class="input-group">
+                  <input type="password" id="pass1" class="form-control" placeholder="Enter new password">
+                  <button class="btn btn-outline-secondary toggle-pass" type="button">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+                <small id="para5" class="text-danger d-none">Enter a password</small>
               </div>
-              <hr>
-            
-            <div class="image ml-5 container" style="width: 200px; height: 200px; border: 1px solid burlywood;">
-                <img src="../images/profile.jpeg" alt="profile picture" class="container-fluid">
-    
-            </div>
-            <ul>
-                <li><a href="../employeepage.php">Home</a></li>
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="view_applications.php">View Applications</a></li>
-                <li><a href="usersettings.php">settings</a></li>
-                <li><a href="">Help</a></li>
-            </ul>
-            <div class="col-6">
-                <form action="../process/logout.php" method="post"><button class="btn btn-primary m-3">Log Out</button></form><p class="mx-3"><?php echo $user_id['jobSeeker_email']; ?></p>
-            </div>
-           
-          </div>
-    
-    
 
+              <div class="col-md-6 mb-3">
+                <label for="pass2" class="form-label fw-semibold">Confirm Password</label>
+                <div class="input-group">
+                  <input type="password" id="pass2" name="password" class="form-control" placeholder="Confirm password">
+                  <button class="btn btn-outline-secondary toggle-pass" type="button">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+                <small id="para6" class="text-danger d-none">Passwords must match</small>
+              </div>
+            </div>
 
-        <script src="../jquery-3.7.1.min.js"></script>
-    
-    <script src="../bootstrap/js/bootstrap.js"></script>
-    <script>
-       
-    </script>
-    </body>
-</html>
+            <!-- Qualification and Experience -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="qualification" class="form-label fw-semibold">Qualification</label>
+                <select name="qualification" id="qualification" class="form-select">
+                  <option value="">Select Qualification</option>
+                  <option value="olevel">O-Level / SSCE</option>
+                  <option value="nce">NCE</option>
+                  <option value="nd">National Diploma</option>
+                  <option value="bsc">B.Sc</option>
+                  <option value="msc">M.Sc</option>
+                  <option value="phd">Ph.D</option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="yox" class="form-label fw-semibold">Experience</label>
+                <select name="experience" id="yox" class="form-select">
+                  <option value="">Select Experience</option>
+                  <?php 
+                    for ($i = 1; $i <= 10; $i++) {
+                      $selected = $user_id['jobSeeker_experience'] == $i ? "selected" : "";
+                      $label = ($i < 10) ? "$i Year(s)" : "$i Years and Above";
+                      echo "<option value='$i' $selected>$label</option>";
+                    }
+                  ?>
+                </select>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label for="add" class="form-label fw-semibold">Address</label>
+              <textarea name="address" id="add" class="form-control" rows="3"><?= $user_id['jobSeeker_Address'] ?></textarea>
+            </div>
+
+            <!-- CV Upload -->
+            <div class="mb-3">
+              <label for="cv" class="form-label fw-semibold">Upload CV (PDF only, max 10MB)</label>
+              <input type="file" class="form-control" id="cv" name="cv" accept=".pdf" />
+            </div>
+
+            <!-- Submit -->
+            <div class="text-end">
+              <button type="submit" name="save" value="save" class="btn btn-primary px-4">
+                <i class="bi bi-save me-2"></i>Save Settings
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Include Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Sneat JS -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Password toggle
+  document.querySelectorAll('.toggle-pass').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = btn.parentElement.querySelector('input');
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('bi-eye', 'bi-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.replace('bi-eye-slash', 'bi-eye');
+      }
+    });
+  });
+
+  // Form validation
+  const form = document.getElementById('settingsForm');
+  form.addEventListener('submit', e => {
+    let valid = true;
+    const email = document.getElementById('email');
+    const pass1 = document.getElementById('pass1');
+    const pass2 = document.getElementById('pass2');
+    const number = document.getElementById('number');
+
+    // Phone validation
+    if (!/^[0-9]{10,15}$/.test(number.value)) {
+      document.getElementById('para3').classList.remove('d-none');
+      valid = false;
+    } else {
+      document.getElementById('para3').classList.add('d-none');
+    }
+
+    // Email validation
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!emailPattern.test(email.value)) {
+      document.getElementById('para4').classList.remove('d-none');
+      valid = false;
+    } else {
+      document.getElementById('para4').classList.add('d-none');
+    }
+
+    // Password validation
+    if (pass1.value && pass1.value !== pass2.value) {
+      document.getElementById('para6').classList.remove('d-none');
+      valid = false;
+    } else {
+      document.getElementById('para6').classList.add('d-none');
+    }
+
+    if (!valid) e.preventDefault();
+  });
+});
+</script>
+
+<?php require_once 'partials/footer.php'; ?>

@@ -1,327 +1,141 @@
 <?php
-    session_start();
-    require_once "../classes/User.php";
-    require_once "userguard.php";
-     $user = new User;
-     if(isset($_SESSION['user_id'])){
-         $id = $_SESSION['user_id'];
-         $user_id = $user->get_user_by_id($id);
-        
-     }else{
-         header("location:../login.php");
-         
-     }
-     require_once "../classes/Employer.php";
-     $employer = new Employer;
-     $fetchs = $employer->fetch_vacancies_for_users();
-     
+session_start();
+require_once "../classes/User.php";
+require_once "../classes/Employer.php";
+require_once "userguard.php";
 
-     $num = 0;
-     $numb = 0;
-    //  if(!empty($user_id['jobSeeker_firstName'])){
-    //     $num =$num-10 ;
-    //     $numb = $numb + 10;
-    //  }
-   foreach ($user_id as $value) {
-   //foreach($value as $v){
-    if(!empty($value)){
-            $num =$num+7.69 ;
-            $numb = $numb + 10;
-          }
-  // }
+$user = new User;
+if (isset($_SESSION['user_id'])) {
+    $id = $_SESSION['user_id'];
+    $user_id = $user->get_user_by_id($id);
+    $profile = $user_id;
+} else {
+    header("location:../login.php");
+    exit;
 }
-    //  $num = $num/100;
 
-    //  $calc = 472 * $num;
-    $num = 472-472*($num/100);
+$employer = new Employer;
+$fetchs = $employer->fetch_vacancies_for_users();
 
-  //  $calc = 472 * $num;
-  
-   
-   
+// Profile completion calculation
+$total_fields = 9;
+$filled = 0;
+$fields = [
+    'jobSeeker_firstName', 'jobSeeker_lastName', 'jobSeeker_phone',
+    'jobSeeker_email', 'jobSeeker_gender', 'jobSeeker_qualification',
+    'jobSeeker_experience', 'jobSeeker_CV', 'jobSeeker_Address'
+];
 
+foreach ($fields as $field) {
+    if (!empty($user_id[$field])) $filled++;
+}
+
+$completion_percent = round(($filled / $total_fields) * 100);
+$active = 'dashboard';
+
+require_once 'partials/header.php';
 ?>
 
+<div class="container py-4">
+  <div class="row align-items-center mb-4">
+    <div class="col-12 col-md-8">
+      <h4 class="fw-bold text-primary mb-1">Welcome, <?= htmlspecialchars($user_id['jobSeeker_firstName']); ?> 👋</h4>
+      <p class="text-muted mb-0">Here’s your job dashboard overview.</p>
+    </div>
+    <div class="col-12 col-md-4 text-md-end text-center mt-3 mt-md-0">
+      <a href="usersettings.php" class="btn btn-sm btn-outline-primary">
+        <i class="bx bx-cog"></i> Edit Profile
+      </a>
+    </div>
+  </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My job Solutions web is a website with the sole imterest of helping Nigerians get a job of their choice without the stress of going about with their CVs ">
-    <meta name="keywords" content="jobs in lagos">
-    <meta property="og:image" content="images/logo">
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../fontawesome/css/all.css">
-    <link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <link rel="shortcut icon" href="../images/logo.png" type="image/x-icon">
-    <style>
-        .myoff ul li a{
-            
-            text-decoration: none;
-            color: rgb(95, 89, 89);
-            
-            
-        }
-        .myoff ul li{
-            list-style-type: none;
-            
+  <?php if (isset($_SESSION['feedback'])): ?>
+    <div class="alert alert-success"><?= $_SESSION['feedback']; ?></div>
+    <?php unset($_SESSION['feedback']); ?>
+  <?php endif; ?>
+  <?php if (isset($_SESSION['errormsg'])): ?>
+    <div class="alert alert-danger"><?= $_SESSION['errormsg']; ?></div>
+    <?php unset($_SESSION['errormsg']); ?>
+  <?php endif; ?>
 
-        }
-        #borrow{
-        height: 400px;
-        width: 500px;
-        display: flex;
-        border-radius: 50%;
-        justify-content: center;
-        align-items: center;
-      }
-     
-      circle{
-        fill: none;
-        stroke: url(#GradientColor);
-        stroke-width: 20px;
-        stroke-dasharray: 472;
-        stroke-dashoffset: 472;
-        animation: anim 2s linear forwards;
-      }
-      @keyframes anim{
-        100%{
-          stroke-dashoffset: <?php echo $num ?>;
-        }
-      }
-        
-    </style>
-    
-    <title>My Job Solutions</title>
-   
-</head>
-<body>
-    <div class="container">
-       
-        <h2 class="text-primary">Welcome <?php echo $user_id['jobSeeker_firstName'] ?></h2>
-        <div class="row navigation">
-            <div class="col col-md-1">
-                <img src="../images/logo.png" alt="my logo" class="img-fluid">
+  <div class="row g-4">
+    <!-- Profile Completion Card -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body text-center">
+          <h5 class="fw-semibold mb-3">Profile Completion</h5>
+          <div class="progress mb-3" style="height: 12px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $completion_percent ?>%;" 
+                 aria-valuenow="<?= $completion_percent ?>" aria-valuemin="0" aria-valuemax="100">
+              <?= $completion_percent ?>%
             </div>
-           
-            
-               
-            <div class="col col-md-2 ff">
-                <a id="linking2" href="#" class="" >Help<span class='fa fa-chevron-down' style="margin-left: 5px;"></span></a>
-                <div class="employerdropdown">
-                    <a href="#" style="border-bottom: 1px solid black;">Faq </a>
-                    <a href="#contact" style="border-top: 1px solid black;border-bottom: 1px solid black">Contact Us</a>
-               </div>
-            </div>
-            
-            <div class="col-2 buttonspan"><button class="mt-2"><span class="fa fa-bars "></span></button></div>
-            <div class="col-1 offset-md-2 mt-2">
-                  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                    <span class="fa-regular fa-user"></span>
-                  </button>
-                
-            </div>
+          </div>
+          <p class="text-muted small mb-3">Complete your profile to increase your chances of getting hired.</p>
+
+          <div class="text-start small">
+            <?php foreach ($fields as $field): ?>
+              <div class="form-check mb-1">
+                <input class="form-check-input" type="checkbox" disabled <?= !empty($user_id[$field]) ? 'checked' : '' ?>>
+                <label class="form-check-label"><?= ucwords(str_replace(['jobSeeker_', '_'], ['', ' '], $field)); ?></label>
+              </div>
+            <?php endforeach; ?>
+          </div>
         </div>
-        <?php
-        if(isset($_SESSION['feedback'])){
-            echo '<div class="alert alert-success">'.$_SESSION['feedback'].'</div>';
-            unset($_SESSION['feedback']);
-        }
-        if(isset($_SESSION['errormsg'])){
-            echo '<div class="alert alert-danger">'.$_SESSION['errormsg'].'</div>';
-            unset($_SESSION['errormsg']);
-        }
-
-        ?>
-
-        <div class="row"></div>
-        <div class="row">
-            <div class="col-12 col-md-6 col-md-8">
-                <h1 style="text-align: center;">Available jobs</h1>
-                <?php
-                    foreach($fetchs as $fetch){
-                        $exp_date = $fetch['dateClosed'];
-                        $today_date = date('Y-m-d');
-                        $exp_date = strtotime($exp_date);
-                        $today_date = strtotime($today_date);
-                        if($today_date<$exp_date){
-                          
-                ?>
-                <div class="col-12 m-2" style="border: 1px solid black;">
-                <img src="../logos/<?php echo $fetch['employer_companyLogo'] ?>" alt="" style="width: 100px;height: 100px;">
-                    <h3 style="text-align: center;"><?php echo $fetch['employer_companyName'] ?></h3>
-                    
-                    <label for="">Role</label>
-                    <input type="text" disabled class="form-control" value="<?php echo ucfirst($fetch['jobVacancy_title']) ?>">
-                    <label for="">Qualification</label>
-                    <input type="text" disabled class="form-control" value=" <?php echo ucfirst($fetch['qualification']) ?>">
-                    <p>Salary Range= <?php echo $fetch['vacancy_salaryRange'] ?></p>
-                    
-                    <label for="">Location</label>
-                    <p>State:   <?php echo $fetch['state_name'] ?> Local Government Area: <?php echo $fetch['lga_name'] ?></p>
-           
-                      
-                    <a href="viewjobs.php?jid=<?php echo $fetch['jobVacancy_id']?>"  type="submit" class="btn btn-primary mx-5">Apply</a>
-                  
-                </div> 
-
-                <?php
-                        }
-                    }
-                ?>
-               
-              
-            </div>
-            <div class="col-12  col-md-4">
-                <h1 style="text-align: center;">Status check</h1>
-                <div id="borrow">
-                 <svg width="160px" height="160px">
-                     <defs>
-                        <linearGradient id="GradientColor">
-                    <stop offset="0%" stop-color="blue"/>
-                 <stop offset="100%" stop-color="red"/>
-                </linearGradient>
-                </defs>
-   
-                <circle cx="80" cy="80" r="70" stroke-line-cap="round" />
-
-  </svg>
-
-    
- </div>
- <h1 ><span class="text-primary" id="numb"></span>% Completed</h1>
-               <div>
-                <p>
-                <input <?php
-                    echo !empty($user_id['jobSeeker_firstName']) ? "checked" : ""; 
-                ?>
-                
-                type="checkbox" disabled name="firstname" id="first" value="firstname" class="form-check-input">Firstname</p>
-                <p>
-                <input 
-                <?php
-                    echo !empty($user_id['jobSeeker_lastName']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="lastname" id="last" value="lastname" class="form-check-input">Lastname</p>
-                <p>
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_phone']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="phone" id="phone" value="phone" class="form-check-input">phone number</p>
-                <p>
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_email']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="email" id="email" value="email" class="form-check-input">Email</p>
-                <p>
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_gender']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="gender" id="gender" value="gender" class="form-check-input">gender</p>
-                <p>
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_qualification']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="qualification" id="qualification" value="qualification" class="form-check-input">Qualification</p>
-                <p>
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_experience']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="exp" id="exp" value="exp" class="form-check-input">Experience</p>
-                
-                <input  <?php
-                    echo !empty($user_id['jobSeeker_CV']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="cvcheck" id="cv" value="cv" class="form-check-input">CV</p>
-                <p><input  <?php
-                    echo !empty($user_id['jobSeeker_Address']) ? "checked" : ""; 
-                ?>  disabled  type="checkbox" name="address" id="address" value="address" class="form-check-input">Address</p>
-                
-
-            </div>
-            </div>
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="row" id="contac" >
-            <h3>Other ways to contact us</h3>
-            <div class="col-md-6"  style="display: inline;">
-             <a href="#"><img src="../icons/facebook.png" alt="facebooklink" class="img-fluid" style="width: 30px;"></a>
-             <a href="#"><img src="../icons/instagram.png" alt="instagram link" class="img-fluid"  style="width: 30px;"></a>
-             <a href="#"><img src="../icons/whatsapp.png" alt="whatsapp link" class="img-fluid"  style="width: 30px;"></a>
-            </div>
-           
-            <div class="col-12">
-             <p class=""> &copy;copyright 2024.All rights Reserved</p>
-            </div>
-            
-            </div>
+      </div>
     </div>
 
-
-
-
-
-
-    <div class="offcanvas offcanvas-end myoff" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h3 style="text-align: center;">Account Information</h3>        
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <!-- Available Jobs -->
+    <div class="col-12 col-md-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-semibold mb-0">Available Jobs</h5>
+            <a href="available_jobs.php" class="text-primary small">View All</a>
           </div>
-          <hr>
-        
-        <div class="image ml-5 container" style="width: 200px; height: 200px; border: 1px solid burlywood;">
-            <img src="../images/profile.jpeg" alt="profile picture" class="container-fluid">
-
-        </div>
-        <ul>
-            <li><a href="../employeepage.php">Home</a></li>
-            <li><a href="view_applications.php">View Applications</a></li>
-            <li><a href="usersettings.php">settings</a></li>
-            <li><a href="">Help</a></li>
-        </ul>
-        <div class="col-6">
-                <form action="../process/logout.php" method="post"><button class="btn btn-primary m-3">Log Out</button></form><p class="mx-3"><?php echo $user_id['jobSeeker_email']; ?></p>
+          <div class="row">
+            <?php 
+            $has_jobs = false;
+            foreach ($fetchs as $fetch):
+              $exp_date = strtotime($fetch['dateClosed']);
+              $today_date = strtotime(date('Y-m-d'));
+              if ($today_date < $exp_date):
+                $has_jobs = true;
+            ?>
+            <div class="col-12 col-lg-6 mb-3">
+              <div class="card border shadow-sm h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center mb-2">
+                    <img src="../logos/<?= htmlspecialchars($fetch['employer_companyLogo']); ?>" 
+                         alt="Logo" class="rounded-circle border me-3" 
+                         style="width: 50px; height: 50px; object-fit: cover;">
+                    <div>
+                      <h6 class="fw-semibold mb-0"><?= htmlspecialchars($fetch['employer_companyName']); ?></h6>
+                      <small class="text-muted"><?= ucfirst($fetch['jobVacancy_title']); ?></small>
+                    </div>
+                  </div>
+                  <p class="mb-1 text-muted small"><i class="bx bx-map"></i> <?= $fetch['state_name']; ?>, <?= $fetch['lga_name']; ?></p>
+                  <p class="mb-2"><span class="fw-semibold">Salary:</span> <?= $fetch['vacancy_salaryRange']; ?></p>
+                  <a href="viewjobs.php?jid=<?= $fetch['jobVacancy_id']; ?>" class="btn btn-sm btn-primary w-100">Apply Now</a>
+                </div>
+              </div>
             </div>
-           
-       
-      </div>
-   
+            <?php 
+              endif;
+            endforeach;
 
-    <script src="../jquery-3.7.1.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(".ff").hover(function(){
-                $(this).children("div").slideToggle(100).siblings("a").children("span").toggleClass("fa-xmark")
-            })
-            
-        })
-    </script>
-    <script src="../bootstrap/js/bootstrap.js"></script>
-    <script>
-        // $(function(){
-        //     var firstname = $('first').attr();
-        //     if(firstname=="checked"){
-        //         alert("hello World");
-        //     }
-        // })
-        let numb = document.getElementById("numb");
-        let count = 0;
-        setInterval(()=>{
-           if(count ==<?php echo $numb-30 ?>){
-            clearInterval();
-           }else{
-            count += 1;
-            numb.innerHTML = count ;
-           
-           }
-        }, 30)
-    </script>
-</body>
-</html>   
+            if (!$has_jobs): 
+            ?>
+            <div class="col-12 text-center py-4">
+              <div class="alert alert-secondary">
+                <i class="bx bx-briefcase"></i> No active job postings at the moment.
+              </div>
+            </div>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php require_once 'partials/footer.php'; ?>
