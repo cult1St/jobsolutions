@@ -6,8 +6,9 @@
     $states = $cat1->fetch_state();
 
     if(isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])){
-        header("location: ". base_url("userfiles/dashboard.php"));
+        header("location: ". base_url("user/dashboard.php"));
     }
+    $active_page = 'signin';
     require_once "partials/header.php";
 
     $step = isset($_GET['step']) && !empty($_GET['step']) ? $_GET['step'] : "login";

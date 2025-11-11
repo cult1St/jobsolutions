@@ -68,7 +68,7 @@ session_start();
                 
                 <div class="col-8 offset-2">
                    <span>New Member</span> <button id="btnnnn" class="btn btn-success" style="border: none; color: blue;background: transparent;">Sign Up</button>
-                    <form action="employerfiles/process/loginprocess.php" method="post" >
+                    <form action="employer/process/loginprocess.php" method="post" >
                         <label for="username">Username</label>
                         <input type="email" name="email" id="username" class="form-control m-2" placeholder="Email" >
                         <p style="color: red;display: none;" id="para1" >Enter Username</p>
@@ -83,7 +83,7 @@ session_start();
 
                           <button type="button" name="login" value="login" class="btn btn-primary m-2" id="looginbtn">Login</button>
                     </form>
-                    <a href="employerfiles/forgetpasswordform.php">Forgot Password</a>
+                    <a href="employer/forgetpasswordform.php">Forgot Password</a>
                 </div>
             </div>
            </div>
@@ -92,7 +92,7 @@ session_start();
                 <div class="row">
                     <div class="col-8 offset-2">
                        <span>Already Have An Account ?</span> <button id="btnnnn1"  class="" style="border: none; color: blue; background: transparent;">Login</button>
-                        <form action="employerfiles/process/signupprocess.php" method="post">
+                        <form action="employer/process/signupprocess.php" method="post">
                            <div class="firstform">
                            
                             <label for="fname">Firstname</label>

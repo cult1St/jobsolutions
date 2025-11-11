@@ -33,7 +33,7 @@ if($_POST['save']){
              }
             if($errors){
                 $_SESSION['errormsg'] = $errors;
-                header("location:../userfiles/usersettings.php");
+                header("location:../user/usersettings.php");
                 exit();
                
             }else{
@@ -43,11 +43,11 @@ if($_POST['save']){
                     $checked = $update->update_without_password($phone, $email, $qualification, $address, $file, $experience, $_SESSION['user_id']);
                     if($checked){
                         $_SESSION['feedback'] = "Settings Updated Successfully";
-                        header("location:../userfiles/dashboard.php");
+                        header("location:../user/dashboard.php");
                         exit();
                     }else{
                         $_SESSION['admin_errormsg'] = "Unable To input file please try again";
-                        header("location:../userfiles/usersettings.php");
+                        header("location:../user/usersettings.php");
                         exit();
                     }
                     die();
@@ -55,16 +55,16 @@ if($_POST['save']){
                  $checked = $update->update($phone, $email, $password, $qualification, $address, $file, $experience, $_SESSION['user_id']);
                 if($checked){
                     $_SESSION['feedback'] = "Settings Updated Successfully";
-                    header("location:../userfiles/dashboard.php");
+                    header("location:../user/dashboard.php");
                     exit();
                 }else{
                     $_SESSION['admin_errormsg'] = "Unable To input file please try again";
-                    header("location:../userfiles/usersettings.php");
+                    header("location:../user/usersettings.php");
                     exit();
                 }
             }
 }else{
-    header('location:../userfiles/usersettings.php');
+    header('location:../user/usersettings.php');
 }
 
 

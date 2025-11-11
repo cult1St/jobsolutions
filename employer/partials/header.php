@@ -108,7 +108,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
 
                     <!-- Dashboard / Home -->
                     <li class="menu-item <?= ($active == 'dashboard') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>employerfiles/employerdashboard.php" class="menu-link">
+                        <a href="<?= base_url() ?>employer/employerdashboard.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Dashboard">Dashboard</div>
                         </a>
@@ -116,7 +116,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
 
                     <!-- Upload Jobs -->
                     <li class="menu-item <?= ($active == 'upload_jobs') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>employerfiles/uploadjob.php" class="menu-link">
+                        <a href="<?= base_url() ?>employer/uploadjob.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-upload"></i>
                             <div data-i18n="Upload Jobs">Upload Jobs</div>
                         </a>
@@ -124,7 +124,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
 
                     <!-- View Applications -->
                     <li class="menu-item <?= ($active == 'applications') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>employerfiles/viewapplications.php" class="menu-link">
+                        <a href="<?= base_url() ?>employer/viewapplications.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-file"></i>
                             <div data-i18n="View Applications">View Applications</div>
                         </a>
@@ -132,7 +132,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
 
                     <!-- Settings -->
                     <li class="menu-item <?= ($active == 'settings') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>employerfiles/settings.php" class="menu-link">
+                        <a href="<?= base_url() ?>employer/settings.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
                             <div data-i18n="Settings">Settings</div>
                         </a>
@@ -140,7 +140,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
 
                     <!-- Logout -->
                     <li class="menu-item">
-                        <a href="<?= base_url() ?>process/logout.php" class="menu-link">
+                        <a href="<?= base_url() ?>employer/logout.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-log-out"></i>
                             <div data-i18n="Logout">Logout</div>
                         </a>
@@ -214,13 +214,13 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="<?= base_url() ?>userfiles/usersettings.php">
+                                        <a class="dropdown-item" href="<?= base_url() ?>employer/settings.php">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="<?= base_url() ?>userfiles/usersettings.php">
+                                        <a class="dropdown-item" href="<?= base_url() ?>employer/settings.php">
                                             <i class="bx bx-cog me-2"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>
@@ -230,7 +230,7 @@ $userFullName = $userProfile['employer_fullName'] ?? '';
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="<?= base_url() ?>process/logout.php">
+                                        <a class="dropdown-item" href="<?= base_url() ?>employer/logout.php">
                                             <i class="bx bx-power-off me-2"></i>
                                             <span class="align-middle">Log Out</span>
                                         </a>

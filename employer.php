@@ -7,8 +7,9 @@ $cat1 = new Employer;
 $states = $cat1->fetch_state();
 
 if (isset($_SESSION['useronline']) && !empty($_SESSION['useronline'])) {
-    header("location: " . base_url("userfiles/dashboard.php"));
+    header("location: " . base_url("employer/dashboard.php"));
 }
+$active_page = 'signin';
 
 require_once "partials/header.php";
 
@@ -28,7 +29,7 @@ $display_block = "style='display:block'";
                 <div class="alert alert-danger text-center"><?= $_SESSION['errormsg']; unset($_SESSION['errormsg']); ?></div>
             <?php endif; ?>
 
-            <form action="employerfiles/process/loginprocess.php" method="post">
+            <form action="employer/process/loginprocess.php" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Email</label>
                     <input type="email" name="email" id="username" class="form-control" placeholder="Enter your email" required>
@@ -46,7 +47,7 @@ $display_block = "style='display:block'";
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <a href="employerfiles/forgetpasswordform.php" class="text-decoration-none" style="color:#b30000;">Forgot Password?</a>
+                    <a href="employer/forgetpasswordform.php" class="text-decoration-none" style="color:#b30000;">Forgot Password?</a>
                 </div>
 
                 <button name="login" value="login" type="submit" class="btn w-100 fw-bold" style="background:#b30000;color:white;">Login</button>
@@ -68,7 +69,7 @@ $display_block = "style='display:block'";
                 <div class="alert alert-danger text-center"><?= $_SESSION['errormsg']; unset($_SESSION['errormsg']); ?></div>
             <?php endif; ?>
 
-            <form action="employerfiles/process/signupprocess.php" method="post">
+            <form action="employer/process/signupprocess.php" method="post">
                 <div class="firstform">
                     <div class="row mb-3">
                         <div class="col-md-6">

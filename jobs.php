@@ -69,10 +69,10 @@ $draw = round($draw, 0, 0.5);
             ?>
             <div class="col-md-6">
               <div class="product-item">
-                <a href="<?= base_url() ?>/userfiles/viewjobs.php?jid=<?= $job['jobVacancy_id'] ?>"><img
+                <a href="<?= base_url() ?>/user/viewjobs.php?jid=<?= $job['jobVacancy_id'] ?>"><img
                     src="assets/images/product-1-370x270.jpg" alt=""></a>
                 <div class="down-content">
-                  <a href="<?= base_url() ?>/userfiles/viewjobs.php?jid=<?= $job['jobVacancy_id'] ?>">
+                  <a href="<?= base_url() ?>/user/viewjobs.php?jid=<?= $job['jobVacancy_id'] ?>">
                     <h4><?php echo ucfirst($job['jobVacancy_title']) ?></h4>
                   </a>
 

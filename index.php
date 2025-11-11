@@ -1,273 +1,231 @@
 <?php
 require_once "classes/Employer.php";
-    $employer = new Employer;
-    require_once "classes/User.php";
-    $user = new User;
-    $fetchss = $employer->fetch_vacancies_for_users();
-    require_once "partials/header.php";
-    require_once "partials/banner.php";
-   
+require_once "classes/User.php";
+require_once "partials/header.php";
+require_once "partials/banner.php";
+
+$employer = new Employer;
+$user = new User;
+$fetchss = $employer->fetch_vacancies_for_users();
 ?>
 
-      
-        <div class="row find my-5">
-            <div class="col-12 col-md-6 p-2">
-                <h1 class="text-info">
-                    Tired of looking around for jobs,Job Solutions is there for you. Just search for the right job that suits your career.
-                </h1>
-                <h2>
-                    Register if you don't have an account
-                </h2>
-                <a href="login.php" class="btn btn-primary pb-3">Register</a>
-            </div>
-            <div class="col-12 col-md-5 m-3" >
-                <img src="images/jobs.jpeg" alt="jobimg" class="container">
-            </div>
+<!-- Hero Section -->
+<div class="container my-5">
+  <div class="row align-items-center justify-content-between">
+    <!-- Text Column -->
+    <div class="col-12 col-md-6 mb-4 mb-md-0 text-center text-md-start">
+      <h1 class="text-info fw-bold">
+        Find your dream job today with <strong>Job Solutions</strong>.
+      </h1>
+      <h4 class="mt-3 text-secondary">
+        Join thousands of job seekers already connecting with top employers across Nigeria.
+      </h4>
+      <a href="login.php?step=signup" class="btn btn-primary mt-4 px-4 py-2">Get Started</a>
+    </div>
+
+    <!-- Image Column -->
+    <div class="col-12 col-md-5 text-center">
+      <img src="images/jobs.jpeg" alt="Job search" class="img-fluid rounded shadow-lg">
+    </div>
+  </div>
+</div>
+
+<!-- Featured Jobs -->
+<div class="latest-products">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <h2>Featured Jobs</h2>
+          <a href="jobs.php">View all <i class="fa fa-angle-right"></i></a>
         </div>
-        <!-- <div class="row mx-3 my-3">
-            <?php
-            if(isset($_SESSION['searchmsg'])){
-                echo '<div class="badge bg-info">'.$_SESSION['searchmsg'].'</div>';
-                unset($_SESSION['searchmsg']);
-            }
+      </div>
 
-            ?>
-                <h3 class="text-info">
-                    Available jobs
-                </h3>
-           
-        </div> -->
-
-
-        
-    <div class="latest-products">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Featured Jobs</h2>
-              <a href="jobs.html">view more <i class="fa fa-angle-right"></i></a>
-            </div>
-          </div>
-          <?php
-                if(isset($fetchss) && !empty($fetchss)){
-             
-                foreach ($fetchss as $key => $fetch) {
-                  if($key < 3){
-                    //get the states for each job post
-                    $state = $user->get_state_by_id($fetch['states_id']);
-                    $lga =  $user->get_lga_by_id($fetch['lga']);
-                ?>
-               
-               
-        <div class="col-md-4">
+      <?php if (!empty($fetchss)): ?>
+        <?php foreach ($fetchss as $key => $fetch): ?>
+          <?php if ($key < 3): 
+            $state = $user->get_state_by_id($fetch['states_id']);
+            $lga = $user->get_lga_by_id($fetch['lga']);
+          ?>
+          <div class="col-md-4">
             <div class="product-item">
-              <a href="<?= base_url() ?>/userfiles/viewjobs.php?jid=<?= $fetch['jobVacancy_id'] ?>"><img src="assets/images/product-1-370x270.jpg" alt=""></a>
+              <a href="<?= base_url() ?>/user/viewjobs.php?jid=<?= $fetch['jobVacancy_id'] ?>">
+                <img src="assets/images/product-1-370x270.jpg" alt="Job image">
+              </a>
               <div class="down-content">
-                <a href="<?= base_url() ?>/userfiles/viewjobs.php?jid=<?= $fetch['jobVacancy_id'] ?>"><h4><?php echo ucfirst($fetch['jobVacancy_title']) ?></h4></a>
+                <a href="<?= base_url() ?>/user/viewjobs.php?jid=<?= $fetch['jobVacancy_id'] ?>">
+                  <h4><?= ucfirst($fetch['jobVacancy_title']); ?></h4>
+                </a>
 
-                <h6>$ <?= $fetch['vacancy_salaryRange'] ?></h6>
-
-                <h4><small><i class="fa fa-briefcase"></i> <?php echo ucfirst($fetch['qualification']) ?> <br> <strong><i class="fa fa-building"></i> <?php echo $fetch['employer_companyName'] ?></strong></small></h4>
+                <h6>₦<?= htmlspecialchars($fetch['vacancy_salaryRange']); ?></h6>
+                <h4>
+                  <small>
+                    <i class="fa fa-briefcase"></i> <?= ucfirst($fetch['qualification']); ?><br>
+                    <strong><i class="fa fa-building"></i> <?= htmlspecialchars($fetch['employer_companyName']); ?></strong>
+                  </small>
+                </h4>
 
                 <small>
-                     <strong class="m-1" title="Posted on"><i class="fa fa-calendar m-1"></i><?= date("d-m-Y", strtotime($fetch['dateClosed'])) ?></strong> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <strong title="Type"><i class="fa fa-file m-1"></i> <?= $fetch['work_type'] ?></strong> &nbsp;&nbsp;&nbsp;&nbsp;
-                     <strong title="Location"><i class="fa fa-map-marker"></i> <?= $lga['lga_name'] ?>,<?= $state['state_name'] ?></strong>
+                  <strong class="m-1" title="Deadline">
+                    <i class="fa fa-calendar m-1"></i><?= date("d-m-Y", strtotime($fetch['dateClosed'])); ?>
+                  </strong>
+                  &nbsp;&nbsp;
+                  <strong title="Type">
+                    <i class="fa fa-file m-1"></i> <?= htmlspecialchars($fetch['work_type']); ?>
+                  </strong>
+                  &nbsp;&nbsp;
+                  <strong title="Location">
+                    <i class="fa fa-map-marker"></i> <?= $lga['lga_name']; ?>, <?= $state['state_name']; ?>
+                  </strong>
                 </small>
               </div>
             </div>
           </div>
+          <?php endif; ?>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="col-12">
+          <p class="text-muted">No featured jobs available at the moment. Please check back later.</p>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
 
-                <?php
-                  }  
-              }
-            }
-                ?>
-       
+<!-- Employer CTA Section -->
+<div class="best-features">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <h2>For Employers</h2>
+        </div>
+      </div>
 
+      <div class="col-md-6">
+        <div class="left-content">
+          <h4>Looking for the right talent?</h4>
+          <p>Post your job openings and reach thousands of qualified candidates on Job Solutions.</p>
+          <a href="employer.php" class="filled-button">Post a Job</a>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="right-image">
+          <img src="<?= base_url(); ?>/assets/images/about-1-570x350.jpg" alt="Employers" class="img-fluid rounded">
         </div>
       </div>
     </div>
+  </div>
+</div>
 
+<!-- Blog Section -->
+<div class="services" style="background-image: url(<?= base_url(); ?>/assets/images/other-image-fullscren-1-1920x900.jpg);">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <h2>From Our Blog</h2>
+          <a href="blog.php">Read more <i class="fa fa-angle-right"></i></a>
+        </div>
+      </div>
 
-
-
-     <div class="best-features">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>For employers</h2>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="left-content">
-            <h4>Are you an employer seeking for the right employees</h4>
-            <p>Click the link Below to Go to the employer section</p>
-             
-              <a href="employer.php" class="filled-button">Read More</a>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="right-image">
-              <img src="<?= base_url() ?>/assets/images/about-1-570x350.jpg" alt="">
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="service-item">
+          <a href="#" class="services-item-image">
+            <img src="assets/images/blog-1-370x270.jpg" class="img-fluid" alt="Career tips">
+          </a>
+          <div class="down-content">
+            <h4><a href="#">How to write a professional CV that stands out</a></h4>
+            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
           </div>
         </div>
       </div>
-    </div>
 
-
-
-        
-    <div class="services" style="background-image: url(<?= base_url() ?>/assets/images/other-image-fullscren-1-1920x900.jpg);" >
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Latest blog posts</h2>
-
-              <a href="blog.html">read more <i class="fa fa-angle-right"></i></a>
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="service-item">
+          <a href="#" class="services-item-image">
+            <img src="assets/images/blog-2-370x270.jpg" class="img-fluid" alt="Interview tips">
+          </a>
+          <div class="down-content">
+            <h4><a href="#">Top interview tips to help you land your next job</a></h4>
+            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
           </div>
+        </div>
+      </div>
 
-          <div class="col-lg-4 col-md-6">
-            <div class="service-item">
-              <a href="#" class="services-item-image"><img src="assets/images/blog-1-370x270.jpg" class="img-fluid" alt=""></a>
-
-              <div class="down-content">
-                <h4><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit hic</a></h4>
-
-                <p style="margin: 0;"> John Doe &nbsp;&nbsp;|&nbsp;&nbsp; 12/06/2020 10:30 &nbsp;&nbsp;|&nbsp;&nbsp; 114</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="service-item">
-              <a href="#" class="services-item-image"><img src="assets/images/blog-2-370x270.jpg" class="img-fluid" alt=""></a>
-
-              <div class="down-content">
-                <h4><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit</a></h4>
-
-                <p style="margin: 0;"> John Doe &nbsp;&nbsp;|&nbsp;&nbsp; 12/06/2020 10:30 &nbsp;&nbsp;|&nbsp;&nbsp; 114</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="service-item">
-              <a href="#" class="services-item-image"><img src="assets/images/blog-3-370x270.jpg" class="img-fluid" alt=""></a>
-
-              <div class="down-content">
-                <h4><a href="#">Aperiam modi voluptatum fuga officiis cumque</a></h4>
-
-                <p style="margin: 0;"> John Doe &nbsp;&nbsp;|&nbsp;&nbsp; 12/06/2020 10:30 &nbsp;&nbsp;|&nbsp;&nbsp; 114</p>
-              </div>
-            </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="service-item">
+          <a href="#" class="services-item-image">
+            <img src="assets/images/blog-3-370x270.jpg" class="img-fluid" alt="Career growth">
+          </a>
+          <div class="down-content">
+            <h4><a href="#">5 career habits that lead to long-term success</a></h4>
+            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="happy-clients">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="section-heading">
-              <h2>Happy Clients</h2>
+<!-- Testimonials -->
+<div class="happy-clients">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-heading">
+          <h2>What Our Users Say</h2>
+          <a href="testimonials.php">See all <i class="fa fa-angle-right"></i></a>
+        </div>
+      </div>
 
-              <a href="testimonials.html">read more <i class="fa fa-angle-right"></i></a>
+      <div class="col-md-12">
+        <div class="owl-clients owl-carousel text-center">
+          <div class="service-item">
+            <div class="icon"><i class="fa fa-user"></i></div>
+            <div class="down-content">
+              <h4>Emeka U.</h4>
+              <p class="n-m"><em>"I got my first remote job through Job Solutions within two weeks!"</em></p>
             </div>
           </div>
-          <div class="col-md-12">
-            <div class="owl-clients owl-carousel text-center">
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>John Doe</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
-              
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>Jane Smith</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
-              
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>Antony Davis</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
-              
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>John Doe</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
-              
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>Jane Smith</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
-              
-              <div class="service-item">
-                <div class="icon">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div class="down-content">
-                  <h4>Antony Davis</h4>
-                  <p class="n-m"><em>"Lorem ipsum dolor sit amet, consectetur an adipisicing elit. Itaque, corporis nulla at quia quaerat."</em></p>
-                </div>
-              </div>
+
+          <div class="service-item">
+            <div class="icon"><i class="fa fa-user"></i></div>
+            <div class="down-content">
+              <h4>Fatima A.</h4>
+              <p class="n-m"><em>"Posting a job as an employer was seamless — I hired two great developers!"</em></p>
+            </div>
+          </div>
+
+          <div class="service-item">
+            <div class="icon"><i class="fa fa-user"></i></div>
+            <div class="down-content">
+              <h4>Oluwaseun T.</h4>
+              <p class="n-m"><em>"The job alerts and recommendations really helped me stay updated."</em></p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-
-    <div class="call-to-action">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="inner-content">
-              <div class="row">
-                <div class="col-md-8">
-                  <h4>Lorem ipsum dolor sit amet, consectetur adipisicing.</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque corporis amet elite author nulla.</p>
-                </div>
-                <div class="col-lg-4 col-md-6 text-right">
-                  <a href="contact.html" class="filled-button">Contact Us</a>
-                </div>
-              </div>
-            </div>
-          </div>
+<!-- Call to Action -->
+<div class="call-to-action">
+  <div class="container">
+    <div class="inner-content">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <h4>Ready to take the next step in your career?</h4>
+          <p>Join Job Solutions today and connect with verified employers offering real opportunities.</p>
+        </div>
+        <div class="col-lg-4 col-md-6 text-end">
+          <a href="contact.php" class="filled-button">Contact Us</a>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-       
-        <?php
-            require_once "partials/footer.php";
-        ?>
+<?php require_once "partials/footer.php"; ?>

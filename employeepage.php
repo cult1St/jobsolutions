@@ -20,7 +20,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 $active = 'available_jobs';
-require_once 'userfiles/partials/header.php';
+require_once 'user/partials/header.php';
 ?>
 
 <div class="container py-4">
@@ -61,7 +61,7 @@ require_once 'userfiles/partials/header.php';
               <i class="bx bx-map"></i> <?php echo $fetch['state_name']; ?>, <?php echo $fetch['lga_name']; ?>
             </p>
 
-            <a href="userfiles/viewjobs.php?jid=<?php echo $fetch['jobVacancy_id']; ?>" 
+            <a href="user/viewjobs.php?jid=<?php echo $fetch['jobVacancy_id']; ?>" 
                class="btn btn-primary w-100">
               Apply Now
             </a>
@@ -83,4 +83,4 @@ require_once 'userfiles/partials/header.php';
   </div>
 </div>
 
-<?php require_once 'userfiles/partials/footer.php'; ?>
+<?php require_once 'user/partials/footer.php'; ?>

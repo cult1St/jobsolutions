@@ -121,9 +121,9 @@
         </div>
         <ul>
             <li><a href="employerpage.php">Home</a></li>
-            <li><a href="employerfiles/uploadjob.php">upload jobs</a></li>
-            <li><a href="employerfiles/settings.php">settings</a></li>
-            <li><a href="employerfiles/viewapplications.php">View applications</a></li>
+            <li><a href="employer/uploadjob.php">upload jobs</a></li>
+            <li><a href="employer/settings.php">settings</a></li>
+            <li><a href="employer/viewapplications.php">View applications</a></li>
             <li><a href="">Help</a></li>
         </ul>
         <div class="col-6">

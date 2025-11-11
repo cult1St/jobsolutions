@@ -93,7 +93,7 @@ $active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'h
 
                     <li class="nav-item"><a class="nav-link" href="<?= base_url() ?>">Blog</a></li>
 
-                    <li class="nav-item dropdown">
+                    <li class="nav-item <?= $active_page == 'signin' ? 'active' : '' ?></li> dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                         aria-haspopup="true" aria-expanded="false">Sign In</a>
 

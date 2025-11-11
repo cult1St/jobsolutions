@@ -106,7 +106,7 @@ if(isset($profile) && !empty($profile)){
                 <ul class="menu-inner py-1">
                     <!-- Dashboard -->
                     <li class="menu-item <?= ($active == 'dashboard') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>userfiles/dashboard.php" class="menu-link">
+                        <a href="<?= base_url() ?>user/dashboard.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-home-circle"></i>
                             <div data-i18n="Dashboard">Dashboard</div>
                         </a>
@@ -122,7 +122,7 @@ if(isset($profile) && !empty($profile)){
 
                     <!-- Applications -->
                     <li class="menu-item <?= ($active == 'applications') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>userfiles/view_applications.php" class="menu-link">
+                        <a href="<?= base_url() ?>user/view_applications.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-file"></i>
                             <div data-i18n="Applications">Applications</div>
                         </a>
@@ -130,7 +130,7 @@ if(isset($profile) && !empty($profile)){
 
                     <!-- Settings -->
                     <li class="menu-item <?= ($active == 'settings') ? 'active' : '' ?>">
-                        <a href="<?= base_url() ?>userfiles/usersettings.php" class="menu-link">
+                        <a href="<?= base_url() ?>user/usersettings.php" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
                             <div data-i18n="Settings">Settings</div>
                         </a>
@@ -211,13 +211,13 @@ if(isset($profile) && !empty($profile)){
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="<?= base_url() ?>userfiles/usersettings.php">
+                                        <a class="dropdown-item" href="<?= base_url() ?>user/usersettings.php">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="<?= base_url() ?>userfiles/usersettings.php">
+                                        <a class="dropdown-item" href="<?= base_url() ?>user/usersettings.php">
                                             <i class="bx bx-cog me-2"></i>
                                             <span class="align-middle">Settings</span>
                                         </a>

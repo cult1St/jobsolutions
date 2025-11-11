@@ -30,7 +30,7 @@ class ORM extends Db
     }
 
     // Build SQL and params for PDO
-    public function toSqlSelect(int $limit = null, int $offset = null)
+    public function toSqlSelect(?int $limit = null, ?int $offset = null)
     {
         $sql = "SELECT " . implode(", ", $this->select) . " FROM {$this->table}";
 
