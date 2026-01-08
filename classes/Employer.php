@@ -293,6 +293,14 @@ class Employer extends User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getTotalJobsCount(){
+        $sql = "SELECT COUNT(job_vacancy.jobVacancy_id) AS total_jobs FROM `job_vacancy` JOIN employers ON jobVacancy_employerId = employer_id JOIN state ON states_id =state_id JOIN lga ON lga = lga_id WHERE job_vacancy.dateClosed >= ?";
+        $stmt = $this->dbconn->prepare($sql);
+        $stmt->execute([date("Y-m-d")]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total_jobs'];
+    }
+
     public function count_applications($job_id){
         $sql = "SELECT COUNT(*) as applicant_count FROM `jobseeker_application` WHERE application_jobVacancy_id = ?";
         $stmt = $this->dbconn->prepare($sql);

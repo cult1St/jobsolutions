@@ -1,12 +1,14 @@
 <?php
 require_once "classes/Employer.php";
 require_once "classes/User.php";
+require_once "classes/ORM.php";
 require_once "partials/header.php";
 require_once "partials/banner.php";
 
 $employer = new Employer;
 $user = new User;
 $fetchss = $employer->fetch_vacancies_for_users();
+$blogs = ORM::table('blogs')->orderBy('created_at', 'desc')->get(3);
 ?>
 
 <!-- Hero Section -->
@@ -126,45 +128,29 @@ $fetchss = $employer->fetch_vacancies_for_users();
       <div class="col-md-12">
         <div class="section-heading">
           <h2>From Our Blog</h2>
-          <a href="blog.php">Read more <i class="fa fa-angle-right"></i></a>
+          <a href="blogs.php">Read more <i class="fa fa-angle-right"></i></a>
         </div>
       </div>
 
-      <div class="col-lg-4 col-md-6">
-        <div class="service-item">
-          <a href="#" class="services-item-image">
-            <img src="assets/images/blog-1-370x270.jpg" class="img-fluid" alt="Career tips">
-          </a>
-          <div class="down-content">
-            <h4><a href="#">How to write a professional CV that stands out</a></h4>
-            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
+      <?php if ($blogs && !empty($blogs)): ?>
+        <?php foreach ($blogs as $blog): ?>
+          <div class="col-lg-4 col-md-6">
+            <div class="service-item">
+              <a href="blog-details.php?id=<?= $blog['id'] ?>" class="services-item-image">
+                <img src="assets/images/blog-1-370x270.jpg" class="img-fluid" alt="<?= htmlspecialchars($blog['title']) ?>">
+              </a>
+              <div class="down-content">
+                <h4><a href="blog-details.php?id=<?= $blog['id'] ?>"><?= htmlspecialchars($blog['title']) ?></a></h4>
+                <p class="text-muted">By Admin | <?= date("d/m/Y", strtotime($blog['created_at'])) ?> | <?= $blog['views'] ?? 0 ?> views</p>
+              </div>
+            </div>
           </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="col-12">
+          <p>No blogs available yet.</p>
         </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="service-item">
-          <a href="#" class="services-item-image">
-            <img src="assets/images/blog-2-370x270.jpg" class="img-fluid" alt="Interview tips">
-          </a>
-          <div class="down-content">
-            <h4><a href="#">Top interview tips to help you land your next job</a></h4>
-            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-4 col-md-6">
-        <div class="service-item">
-          <a href="#" class="services-item-image">
-            <img src="assets/images/blog-3-370x270.jpg" class="img-fluid" alt="Career growth">
-          </a>
-          <div class="down-content">
-            <h4><a href="#">5 career habits that lead to long-term success</a></h4>
-            <p class="text-muted">By Job Solutions Team | <?= date("d/m/Y"); ?></p>
-          </div>
-        </div>
-      </div>
+      <?php endif; ?>
     </div>
   </div>
 </div>

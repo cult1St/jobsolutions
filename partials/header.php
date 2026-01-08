@@ -22,7 +22,8 @@ if (!function_exists('base_url')) {
   }
 }
 
-$active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'home'; 
+$active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'home';
+$page_title = (isset($page_title) && !empty($page_title)) ? $page_title : 'Home Page';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,13 +34,13 @@ $active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'h
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
     content="My job Solutions web is a website with the sole imterest of helping Nigerians get a job of their choice without the stress of going about with their CVs ">
-  <meta name="keywords" content="jobs in lagos">
+  <meta name="keywords" content="jobs in lagos, jobsolutions, momodu wealth jobs, Job website">
   <meta property="og:image" content="images/logo">
   <link rel="icon" href="images/logo">
   <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
     rel="stylesheet">
 
-  <title>Job Solutions </title>
+  <title>Job Solutions || <?= $page_title ?> </title>
 
   <!-- Bootstrap core CSS -->
   <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -87,11 +88,14 @@ $active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'h
                       </a>
                     </li>
 
-                    <li class="nav-item <?= $active_page == 'jobs' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('jobs.php') ?>">Jobs</a></li>
+                    <li class="nav-item <?= $active_page == 'jobs' ? 'active' : '' ?>"><a class="nav-link"
+                        href="<?= base_url('jobs.php') ?>">Jobs</a></li>
 
-                    <li class="nav-item <?= $active_page == 'about' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('about.php') ?>">About us</a></li>
+                    <li class="nav-item <?= $active_page == 'about' ? 'active' : '' ?>"><a class="nav-link"
+                        href="<?= base_url('about.php') ?>">About us</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="<?= base_url() ?>">Blog</a></li>
+                    <li class="nav-item <?= $active_page == 'blog' ? 'active' : '' ?>"><a class="nav-link"
+                        href="<?= base_url('blogs.php')  ?>">Blog</a></li>
 
                     <li class="nav-item <?= $active_page == 'signin' ? 'active' : '' ?></li> dropdown">
                       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
@@ -111,7 +115,8 @@ $active_page = (isset($active_page) && !empty($active_page)) ? $active_page : 'h
                       </div>
                     </li>
 
-                    <li class="nav-item <?= $active_page == 'contact' ? 'active' : '' ?>"><a class="nav-link" href="<?= base_url('contact.php') ?>">Contact Us</a></li>
+                    <li class="nav-item <?= $active_page == 'contact' ? 'active' : '' ?>"><a class="nav-link"
+                        href="<?= base_url('contact.php') ?>">Contact Us</a></li>
                   </ul>
                 </div>
               </div>

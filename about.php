@@ -5,6 +5,7 @@ require_once "classes/User.php";
 $user = new User;
 $fetchss = $employer->fetch_vacancies_for_users();
 $active_page = 'about';
+$page_title = 'About Us';
 require_once "partials/header.php";
 
 ?>

@@ -1,6 +1,7 @@
 <?php
 
 $active_page = 'jobs';
+$page_title = 'Available Jobs';
 
 require_once "partials/header.php";
 //get all categories
